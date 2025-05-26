@@ -1,0 +1,3 @@
+git remote add github https://github.com/diamondsNick/VendingMachineManagementAPI.git
+
+git remote add gitverse https://gitverse.ru/n1kolas/VendingMachineManagementAPI.git

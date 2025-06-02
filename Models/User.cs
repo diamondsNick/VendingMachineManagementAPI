@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -13,6 +14,7 @@ namespace VendingMachineManagementAPI.Models
         [Required]
         public string Email { get; set; }
         public long? RoleID { get; set; }
+        public long? CompanyID { get; set; }
         [MaxLength (10)]
         [AllowNull]
         public string Language { get; set; }
@@ -21,9 +23,10 @@ namespace VendingMachineManagementAPI.Models
         public string Login { get; set; }
         [MaxLength(100)]
         [Required]
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
         public Role Role { get; set; }
-        public IList<CompanyUser> CompanyUsers { get; set; }
+        public Company Company { get; set; }
+        [JsonIgnore]
         public IList<Maintenance> Maintenances { get; set; }
     }
 }

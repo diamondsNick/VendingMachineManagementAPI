@@ -35,7 +35,7 @@ namespace VendingMachineManagementAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VendingMachineManagementAPI", Version = "v1" });
             });
             services.AddDbContext<ManagementDbContext>(options => 
-                    options.UseSqlServer(Configuration.GetConnectionString("Default"))
+                    options.UseSqlServer(Configuration.GetConnectionString("Colledge"))
             );
         }
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -13,6 +15,11 @@ namespace VendingMachineManagementAPI.Models
         [Column (TypeName = "decimal(18,2)")]
         [Required]
         public decimal Finances { get; set; }
-        public IList<CompanyUser> CompanyUsers { get; set; }
+        [AllowNull]
+        public long ParentCompanyID { get; set; }
+        [JsonIgnore]
+        public IList<User> CompanyUsers { get; set; }
+        [JsonIgnore]
+        public IList<VendingMachine> VendingMachines { get; set; }
     }
 }

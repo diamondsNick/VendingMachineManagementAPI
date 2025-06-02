@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -14,7 +15,9 @@ namespace VendingMachineManagementAPI.Models
         [Required]
         public string Description { get; set; }
         public float AvgSales { get; set; }
+        [JsonIgnore]
         public IList<Sale> Sales { get; set; }
+        [JsonIgnore]
         public IList<VendingAvaliability> VendingAvaliabilities { get; set; }
     }
 }

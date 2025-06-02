@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -8,8 +9,9 @@ namespace VendingMachineManagementAPI.Models
         [MaxLength (100)]
         public string Model { get; set; }
         [Required]
-        public long Number { get; set; }
+        public long PhoneNumber { get; set; }
         public SimCard SimCard { get; set; }
+        [JsonIgnore]
         public VendingMachine VendingMachine { get; set; }
     }
 }

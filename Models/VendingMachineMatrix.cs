@@ -1,10 +1,15 @@
-﻿namespace VendingMachineManagementAPI.Models
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace VendingMachineManagementAPI.Models
 {
     public class VendingMachineMatrix
     {
-        public long VendingMachineID { get; set; }
-        public long ProductMatrixID { get; set; }
-        public VendingMachine VendingMachine { get; set; }
-        public ProductMatrix ProductMatrix { get; set; }
+        public long ID { get; set; }
+        public long? ManufacturerID { get; set; }
+        [MaxLength (150)]
+        public string ModelName { get; set; }
+        public IList<VendingMachine> VendingMachines { get; set; }
+        public Manufacturer Manufacturer { get; set; }
     }
 }

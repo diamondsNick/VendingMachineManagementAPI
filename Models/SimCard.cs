@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -9,6 +10,8 @@ namespace VendingMachineManagementAPI.Models
         [MaxLength (25)]
         [Required]
         public string Vendor { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public float Balance { get; set; }
         public Modem Modem { get; set; }
     }
 }

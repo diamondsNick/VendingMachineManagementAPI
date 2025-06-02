@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using Microsoft.VisualBasic;
 
 namespace VendingMachineManagementAPI.Models
@@ -11,6 +12,8 @@ namespace VendingMachineManagementAPI.Models
         public long ID { get; set; }
         public long? StatusID { get; set; }
         public long? OperatingModeID { get; set; }
+        public long? CompanyID { get; set; }
+        public long? ModelID { get; set; }
         public long? ModemID { get; set; }
         [MaxLength (100)]
         [Required]
@@ -39,11 +42,14 @@ namespace VendingMachineManagementAPI.Models
         public IList<MachinePaymentMethod> MachinePaymentMethods { get; set; }
         public Status Status { get; set; }
         public Modem Modem { get; set; }
+        [JsonIgnore]
         public IList<Sale> Sales { get; set; }
         public OperatingMode OperatingMode { get; set; }
+        [JsonIgnore]
         public IList<Maintenance> Maintenances { get; set; }
         public IList<VendingMachineMoney> VendingMachineMoney { get; set; }
         public IList<VendingAvaliability> VendingAvaliabilities { get; set; }
         public VendingMachineMatrix VendingMachineMatrix { get; set; }
+        public Company Company { get; set; }
     }
 }

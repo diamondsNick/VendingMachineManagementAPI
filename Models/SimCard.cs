@@ -11,7 +11,7 @@ namespace VendingMachineManagementAPI.Models
         [Required]
         public string Vendor { get; set; }
         [Column(TypeName = "decimal(18,2)")]
-        public float Balance { get; set; }
+        public decimal Balance { get; set; }
         public Modem Modem { get; set; }
     }
 }

@@ -37,6 +37,7 @@ namespace VendingMachineManagementAPI
             services.AddDbContext<ManagementDbContext>(options => 
                     options.UseSqlServer(Configuration.GetConnectionString("Colledge"))
             );
+            services.AddDbContext<ManagementDbContext>(options => options.EnableDetailedErrors());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

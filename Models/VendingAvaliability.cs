@@ -1,4 +1,6 @@
-﻿namespace VendingMachineManagementAPI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace VendingMachineManagementAPI.Models
 {
     public class VendingAvaliability
     {
@@ -6,6 +8,7 @@
         public long VendingMachineID { get; set; }
         public long? ProductID { get; set; }
         public byte Quantity { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public VendingMachine VendingMachine { get; set; }
         public Product Product { get; set; }

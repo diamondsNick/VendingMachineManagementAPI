@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using System;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Data
@@ -35,7 +36,10 @@ namespace VendingMachineManagementAPI.Data
             {
                 entity.HasKey(c => c.ID);
                 entity.HasIndex(c => c.Name)
-                .IsUnique();
+                    .IsUnique();
+                entity.Property(e => e.Finances)
+                    .HasConversion(e => Math.Round(e, 2),
+                                   e => e);
             });
 
             modelBuilder.Entity<MachinePaymentMethod>(entity =>
@@ -128,11 +132,28 @@ namespace VendingMachineManagementAPI.Data
                     .WithMany(e => e.Sales)
                     .HasForeignKey(e => e.ProductID)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                entity.Property(e => e.Cost)
+                    .HasConversion(e => Math.Round(e, 2),
+                                   e => e);
+
+                entity.Property(e => e.Change)
+                    .HasConversion(e => Math.Round(e, 2),
+                                   e => e);
+
+                entity.Property(e => e.Deposit)
+                    .HasConversion(e => Math.Round(e, 2),
+                                   e => e);
             });
 
             modelBuilder.Entity<SimCard>(entity =>
             {
                 entity.HasKey(e => e.Number);
+                entity.Property(e => e.Balance)
+                    .HasConversion(e =>
+                        Math.Round(e, 2),
+                        e => e
+                    );
             });
 
             modelBuilder.Entity<Status>(entity =>
@@ -172,6 +193,10 @@ namespace VendingMachineManagementAPI.Data
                     .WithMany(e => e.VendingAvaliabilities)
                     .HasForeignKey(e => e.ProductID)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                entity.Property(e => e.Price)
+                    .HasConversion(e => Math.Round(e, 2),
+                                   e => e);
             });
 
             modelBuilder.Entity<VendingMachine>(entity =>
@@ -204,6 +229,16 @@ namespace VendingMachineManagementAPI.Data
                     .WithMany(e => e.VendingMachines)
                     .HasForeignKey(e => e.ModelID)
                     .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            modelBuilder.Entity<Money>(entity =>
+            {
+                entity.HasKey(e => e.ID);
+                entity.HasIndex(e => e.Name)
+                    .IsUnique();
+                entity.Property(e => e.Value)
+                    .HasConversion(e => Math.Round(e, 2),
+                                   e => e);
             });
 
             modelBuilder.Entity<VendingMachineMatrix>(entity =>

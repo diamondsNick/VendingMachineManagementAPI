@@ -1,27 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers
 {
     [Route ("api/[controller]")]
     [ApiController]
-    public class MaintenanceController : Controller
+    public class MachinePaymentMethodController : Controller
     {
         private readonly ManagementDbContext _context;
-        public MaintenanceController(ManagementDbContext context)
+        public MachinePaymentMethodController(ManagementDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMaintenance()
+        public async Task<IActionResult> GetMachinePaymentMethod()
         {
 
-            var maintenances = await _context.Maintenances.ToListAsync();
+            var paymentMethodes = await _context.PaymentMethods.ToListAsync();
 
-            if (maintenances == null || !maintenances.Any())
+            if (paymentMethodes == null || !paymentMethodes.Any())
             {
                 return BadRequest(new { message = "No data was found" });
             }

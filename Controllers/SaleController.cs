@@ -2,6 +2,8 @@
 
 namespace VendingMachineManagementAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class SaleController : Controller
     {
     }

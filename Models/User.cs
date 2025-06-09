@@ -20,9 +20,11 @@ namespace VendingMachineManagementAPI.Models
         public string Language { get; set; }
         [MaxLength(100)]
         [Required]
+        [JsonIgnore]
         public string Login { get; set; }
         [MaxLength(100)]
         [Required]
+        [JsonIgnore]
         public string PasswordHash { get; set; }
         public Role Role { get; set; }
         public Company Company { get; set; }

@@ -2,11 +2,10 @@
 
 namespace VendingMachineManagementAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class PaymentMethodController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
     }
 }

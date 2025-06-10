@@ -43,22 +43,6 @@ namespace VendingMachineManagementAPI.Controllers
             }
         }
         
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> PutUser(long Id, User user)
-        {
-            if (!await UserExists(Id)) return NotFound();
-            if (user.ID != Id) return BadRequest("Id does not match!");
-            try
-            {
-                _context.Entry(user).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-            return Ok();
-        }
         private async Task<bool> UserExists(long Id)
         {
             bool userExists = await _context.Users.AnyAsync(u => u.ID == Id);

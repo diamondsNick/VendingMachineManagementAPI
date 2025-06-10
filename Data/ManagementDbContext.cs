@@ -80,10 +80,11 @@ namespace VendingMachineManagementAPI.Data
             modelBuilder.Entity<Modem>(entity =>
             {
                 entity.HasKey(e => e.ID);
-
+                entity.Property(e => e.SimCardID)
+                    .IsRequired(false);
                 entity.HasOne(e => e.SimCard)
                     .WithOne(e => e.Modem)
-                    .HasForeignKey<SimCard>(e => e.Number);
+                    .HasForeignKey<Modem>(e => e.SimCardID);
             });
 
             modelBuilder.Entity<OperatingMode>(entity =>
@@ -148,12 +149,13 @@ namespace VendingMachineManagementAPI.Data
 
             modelBuilder.Entity<SimCard>(entity =>
             {
-                entity.HasKey(e => e.Number);
-                entity.Property(e => e.Balance)
-                    .HasConversion(e =>
-                        Math.Round(e, 2),
-                        e => e
-                    );
+            entity.HasKey(e => e.ID);
+            entity.Property(e => e.Balance)
+                .HasConversion(e =>
+                    Math.Round(e, 2),
+                    e => e
+                );
+                entity.HasCheckConstraint("CK_PhoneNum", $"Number LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'");
             });
 
             modelBuilder.Entity<Status>(entity =>

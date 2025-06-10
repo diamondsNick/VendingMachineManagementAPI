@@ -10,8 +10,9 @@ namespace VendingMachineManagementAPI.Models
         [MaxLength (100)]
         public string Model { get; set; }
         [AllowNull]
-        public long PhoneNumber { get; set; }
-        public SimCard SimCard { get; set; }
+        public long? SimCardID { get; set; }
+        [JsonIgnore]
+        public SimCard? SimCard { get; set; }
         [JsonIgnore]
         public VendingMachine VendingMachine { get; set; }
     }

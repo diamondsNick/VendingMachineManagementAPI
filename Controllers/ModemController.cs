@@ -1,4 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers
 {
@@ -6,6 +11,92 @@ namespace VendingMachineManagementAPI.Controllers
     [ApiController]
     public class ModemController : Controller
     {
-        
+        private readonly ManagementDbContext _context;
+        public ModemController(ManagementDbContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetModems()
+        {
+
+            var modems = await _context.Modems.ToListAsync();
+
+            if (modems == null || !modems.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(modems);
+        }
+
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetModem(long Id)
+        {
+            var modem = await _context.Modems.FindAsync(Id);
+
+            if (modem == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(modem);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostModem(Modem modem)
+        {
+            try
+            {
+                _context.Modems.Add(modem);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await IsModemExists(modem.ID))
+                    return BadRequest("Already Exists!");
+                else throw;
+            }
+            return CreatedAtAction(nameof(PostModem), modem);
+        }
+
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> PutModem(long Id, Modem modem)
+        {
+            if (Id != modem.ID) return BadRequest("Ids does not match!");
+            if (!await IsModemExists(Id)) return NotFound();
+            try
+            {
+                _context.Entry(modem).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return Ok();
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult> DeleteModem(long Id)
+        {
+            if (!await IsModemExists(Id))
+                return NotFound();
+            try
+            {
+                var modem = await _context.Modems.FindAsync(Id);
+                _context.Modems.Remove(modem);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) { throw; }
+            return Ok();
+        }
+
+        private async Task<bool> IsModemExists(long Id)
+        {
+            bool exists = await _context.Modems.AnyAsync(m => m.ID == Id);
+            return exists;
+        }
     }
 }

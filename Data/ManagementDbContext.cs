@@ -40,6 +40,8 @@ namespace VendingMachineManagementAPI.Data
                 entity.Property(e => e.Finances)
                     .HasConversion(e => Math.Round(e, 2),
                                    e => e);
+                entity.Property(e => e.ParentCompanyID)
+                    .IsRequired(false);
             });
 
             modelBuilder.Entity<MachinePaymentMethod>(entity =>

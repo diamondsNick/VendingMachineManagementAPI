@@ -15,6 +15,11 @@ namespace VendingMachineManagementAPI.Models
         [Column (TypeName = "decimal(18,2)")]
         [Required]
         public decimal Finances { get; set; }
+        [MaxLength(11)]
+        [Required]
+        public string Phone { get; set; }
+        public string Adress { get; set; }
+        public string RegistrationDate { get; set; }
         [AllowNull]
         public long? ParentCompanyID { get; set; }
         [JsonIgnore]

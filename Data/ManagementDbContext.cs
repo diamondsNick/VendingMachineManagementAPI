@@ -42,6 +42,11 @@ namespace VendingMachineManagementAPI.Data
                                    e => e);
                 entity.Property(e => e.ParentCompanyID)
                     .IsRequired(false);
+
+                entity.HasCheckConstraint("CK_CompanyPhone", $"Phone LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'");
+                entity.HasIndex(e => e.Phone)
+                    .IsUnique();
+
             });
 
             modelBuilder.Entity<MachinePaymentMethod>(entity =>
@@ -151,14 +156,18 @@ namespace VendingMachineManagementAPI.Data
 
             modelBuilder.Entity<SimCard>(entity =>
             {
-            entity.HasKey(e => e.ID);
-            entity.Property(e => e.Balance)
+                entity.HasKey(e => e.ID);
+                entity.Property(e => e.Balance)
                 .HasConversion(e =>
                     Math.Round(e, 2),
                     e => e
                 );
                 entity.HasCheckConstraint("CK_PhoneNum", $"Number LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'");
+                entity.HasIndex(e => e.Number)
+                .IsUnique();
+                    
             });
+            
 
             modelBuilder.Entity<Status>(entity =>
             {
@@ -182,6 +191,10 @@ namespace VendingMachineManagementAPI.Data
                 entity.HasIndex(c => c.Email)
                     .IsUnique();
                 entity.HasCheckConstraint("CK_CheckEmail", "Email LIKE '%@%.%'");
+
+                entity.HasCheckConstraint("CK_UserPhone", $"Phone LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'");
+                entity.HasIndex(e => e.Phone)
+                    .IsUnique();
             });
 
             modelBuilder.Entity<VendingAvaliability>(entity =>

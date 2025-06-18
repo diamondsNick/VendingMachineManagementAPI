@@ -34,6 +34,21 @@ namespace VendingMachineManagementAPI.Controllers
             return Ok(sales);
         }
 
+        [HttpGet("company/{CompanyId}")]
+        public async Task<IActionResult> GetCompanySales(long CompanyId)
+        {
+            var sale = await _context.Sales
+                .Include(s => s.VendingMachine)
+                .Where(s => s.VendingMachine.CompanyID == CompanyId)
+                .ToListAsync();
+
+            if (sale == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(sale);
+        }
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetSale(long Id)
         {

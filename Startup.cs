@@ -39,6 +39,8 @@ namespace VendingMachineManagementAPI
                     options.UseSqlServer(Configuration.GetConnectionString("Default"))
             );
             services.AddDbContext<ManagementDbContext>(options => options.EnableDetailedErrors());
+            
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

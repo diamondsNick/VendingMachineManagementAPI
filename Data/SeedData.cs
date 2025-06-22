@@ -11,24 +11,34 @@ namespace VendingMachineManagementAPI.Data
     {
         public static async Task InitializeDataAsync(IServiceProvider serviceProvider)
         {
-            var scope = serviceProvider.CreateScope();
+            using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<ManagementDbContext>();
 
-            await context.Database.MigrateAsync();
+            try
+            {
+                await context.Database.MigrateAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при миграции: {ex.Message}");
+            }
 
             await SeedManufacturersAsync(context);
             await SeedModelsAsync(context);
             await SeedStatusesAsync(context);
+            await SeedRolesAsync(context);
             await SeedSimCardsAsync(context);
             await SeedModemsAsync(context);
             await SeedManufacturersAsync(context);
             await SeedCompaniesAsync(context);
+            await SeedWorkModesAsync(context);
             await SeedVendingMachinesAsync(context);
             await SeedProductsAsync(context);
             await SeedVendingAvaliability(context);
             await SeedPaymentMethodes(context);
             await SeedVendingMachinePaymentMethodsAsync(context);
             await SeedSalesAsync(context);
+
 
         }
         private static async Task SeedManufacturersAsync(ManagementDbContext context)
@@ -126,6 +136,49 @@ namespace VendingMachineManagementAPI.Data
             }
         }
 
+        private static async Task SeedWorkModesAsync(ManagementDbContext context)
+        {
+            if (!await context.OperatingModes.AnyAsync())
+            {
+                await context.OperatingModes.AddRangeAsync(
+                    new OperatingMode { Name = "Обычный" },
+                    new OperatingMode { Name = "Режим сна" },
+                    new OperatingMode { Name = "Техобслуживание" },
+                    new OperatingMode { Name = "Тестовый режим" }
+                );
+
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
+
+        private static async Task SeedRolesAsync(ManagementDbContext context)
+        {
+            if (!await context.Roles.AnyAsync())
+            {
+                await context.Roles.AddRangeAsync(
+                    new Role { Name = "Администратор" },
+                    new Role { Name = "Техник" },
+                    new Role { Name = "Бухгалтер" }
+                );
+
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
+
         private static async Task SeedModemsAsync(ManagementDbContext context)
         {
             if (!await context.Modems.AnyAsync())
@@ -192,7 +245,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 1,
                         ModemID = 1,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "БЦ «Московский»",
                         Adress = "Суворова 121",
                         Coordinates = null,
@@ -208,7 +261,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 2,
                         ModemID = 2,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "ГП «Магнит»",
                         Adress = "Академическая 15 улица",
                         Coordinates = null,
@@ -224,7 +277,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 3,
                         ModemID = 3,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "ДОСААФ",
                         Adress = "Баррикад 174",
                         Coordinates = null,
@@ -240,7 +293,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 5,
                         ModemID = 4,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "Завод «Тайфун»",
                         Adress = "Грабцевское шоссе 174",
                         Coordinates = null,
@@ -256,7 +309,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 7,
                         ModemID = 5,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "Мойка «У Гризли»",
                         Adress = "Карла Либкнехта 31",
                         Coordinates = null,
@@ -272,7 +325,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 8,
                         ModemID = 6,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "Налоговая",
                         Adress = "пер. Воскресенский 28",
                         Coordinates = null,
@@ -288,7 +341,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 4,
                         ModemID = 7,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "Рынок",
                         Adress = "Грабцевское шоссе 46",
                         Coordinates = null,
@@ -304,7 +357,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 6,
                         ModemID = 8,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "ТК «21 Век»",
                         Adress = "Кирова 1",
                         Coordinates = null,
@@ -320,7 +373,7 @@ namespace VendingMachineManagementAPI.Data
                         CompanyID = 1,
                         ModelID = 9,
                         ModemID = 9,
-                        TimeZone = "Europe/Moscow",
+                        TimeZone = "UTC +3",
                         Name = "ТК «21 Век» (снэк)",
                         Adress = "Кирова 1",
                         Coordinates = null,
@@ -411,13 +464,10 @@ namespace VendingMachineManagementAPI.Data
             if(!await context.PaymentMethods.AnyAsync())
             {
                 await context.PaymentMethods.AddRangeAsync(
-                    new PaymentMethod { Name = "Карта" },
-                    new PaymentMethod { Name = "СБП" },
-                    new PaymentMethod { Name = "Наличные" },
-                    new PaymentMethod { Name = "QR-код" },
-                    new PaymentMethod { Name = "Apple Pay" },
-                    new PaymentMethod { Name = "Google Pay" },
-                    new PaymentMethod { Name = "Транспортная карта" }
+                    new PaymentMethod { Name = "Безналичная" },
+                    new PaymentMethod { Name = "Купюроприемник" },
+                    new PaymentMethod { Name = "Монетоприемник" },
+                    new PaymentMethod { Name = "QR-код" }
                     );
                 try
                 {

@@ -53,9 +53,7 @@ namespace VendingMachineManagementAPI.Models
         public IList<VendingMachineMoney> VendingMachineMoney { get; set; }
         [JsonIgnore]
         public IList<VendingAvaliability> VendingAvaliabilities { get; set; }
-        [JsonIgnore]
         public VendingMachineMatrix VendingMachineMatrix { get; set; }
-        [JsonIgnore]
         public Company Company { get; set; }
     }
 }

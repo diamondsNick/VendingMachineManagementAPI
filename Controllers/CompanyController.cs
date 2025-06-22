@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers
@@ -38,6 +41,38 @@ namespace VendingMachineManagementAPI.Controllers
             return company;
         }
 
+        [HttpGet("{amount:int}/{page:int}")]
+        public async Task<ActionResult<PagedCompanies>> GetPagedCompanies(int amount, int page, [FromQuery] long parentCompanyId)
+        {
+            var query = _context.Companies.AsQueryable();
+
+            if (parentCompanyId != 0)
+            {
+                query = query.Where(c => c.ParentCompanyID == parentCompanyId);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(c => c.ID)
+                .Skip((page - 1) * amount)
+                .Take(amount)
+            .ToListAsync();
+
+            if (items == null || items.Count == 0)
+            {
+                return NotFound("Page does not exist!");
+            }
+
+            var result = new PagedCompanies
+            {
+                Companies = items,
+                TotalCount = totalCount
+            };
+
+            return Ok(result);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompany(long id, Company company)
         {
@@ -64,7 +99,7 @@ namespace VendingMachineManagementAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(company);
         }
 
         [HttpPost]

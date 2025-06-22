@@ -12,7 +12,6 @@ namespace VendingMachineManagementAPI.Models
         public string ModelName { get; set; }
         [JsonIgnore]
         public IList<VendingMachine> VendingMachines { get; set; }
-        [JsonIgnore]
         public Manufacturer Manufacturer { get; set; }
     }
 }

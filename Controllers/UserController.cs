@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers
@@ -49,18 +50,65 @@ namespace VendingMachineManagementAPI.Controllers
 
             return Ok(user);
         }
+        [HttpGet("{amount:int}/{page:int}")]
+        public async Task<ActionResult<PagedUsers>> GetPagedUsers(int amount, int page, [FromQuery] long CompanyId)
+        {
+            var query = _context.Users.AsQueryable();
+
+            if (CompanyId != 0)
+            {
+                query = query.Where(c => c.CompanyID == CompanyId);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Include(u => u.Company)
+                .Include(u => u.Role)
+                .OrderBy(c => c.ID)
+                .Skip((page - 1) * amount)
+                .Take(amount)
+            .ToListAsync();
+
+            if (items == null || items.Count == 0)
+            {
+                return NotFound("Page does not exist!");
+            }
+
+            var result = new PagedUsers
+            {
+                Users = items,
+                TotalCount = totalCount
+            };
+
+            return Ok(result);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> PostUser(User user)
+        public async Task<IActionResult> PostUser(PagedUsersCreateDTO userDTO)
         {
+            User user = new User();
             try
             {
+                user = new()
+                {
+                    ID = (long)userDTO.ID,
+                    FullName = userDTO.FullName,
+                    Email = userDTO.Email,
+                    Phone = userDTO.Phone,
+                    RegistrationDate = userDTO.RegistrationDate,
+                    RoleID = userDTO.RoleID,
+                    CompanyID = userDTO.CompanyID,
+                    Language = userDTO.Language,
+                    Login = userDTO.Login,
+                    Password = userDTO.Password
+                };
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (await UserExists(user.ID))
+                if (await UserExists((long)userDTO.ID))
                     return BadRequest("User already exists!");
                 else throw;
             }
@@ -69,8 +117,22 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> PutUser(long Id, User user)
+        public async Task<IActionResult> PutUser(long Id, PagedUsersCreateDTO userDTO)
         {
+            User user = new User()
+            {
+                ID = (long)userDTO.ID,
+                FullName = userDTO.FullName,
+                Email = userDTO.Email,
+                Phone = userDTO.Phone,
+                RegistrationDate = userDTO.RegistrationDate,
+                RoleID = userDTO.RoleID,
+                CompanyID = userDTO.CompanyID,
+                Language = userDTO.Language,
+                Login = userDTO.Login,
+                Password = userDTO.Password
+            };
+
             if (Id != user.ID) return BadRequest("Ids do not match!");
             if (!await UserExists(Id)) return NotFound();
 

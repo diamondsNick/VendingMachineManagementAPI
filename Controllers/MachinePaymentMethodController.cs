@@ -23,14 +23,14 @@ namespace VendingMachineManagementAPI.Controllers
         public async Task<IActionResult> GetMachinePaymentMethod()
         {
 
-            var paymentMethodes = await _context.PaymentMethods.ToListAsync();
+            var machinePaymentMethods = await _context.MachinePaymentMethods.ToListAsync();
 
-            if (paymentMethodes == null || !paymentMethodes.Any())
+            if (machinePaymentMethods == null || !machinePaymentMethods.Any())
             {
                 return BadRequest(new { message = "No data was found" });
             }
 
-            return Ok(paymentMethodes);
+            return Ok(machinePaymentMethods);
         }
 
         [HttpGet("{VendingMachineID}")]
@@ -85,7 +85,7 @@ namespace VendingMachineManagementAPI.Controllers
         {
             if(!await IsMethodExists(VendingMachineID, PaymentMethodID))
                 return NotFound();
-            var metod = await _context.MachinePaymentMethods.FindAsync(VendingMachineID, PaymentMethodID);
+            var metod = await _context.MachinePaymentMethods.FirstOrDefaultAsync(e => e.VendingMachineID == VendingMachineID && e.PaymentMethodID == PaymentMethodID);
             try
             {
                 _context.MachinePaymentMethods.Remove(metod);

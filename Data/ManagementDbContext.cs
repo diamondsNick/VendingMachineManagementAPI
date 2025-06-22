@@ -92,6 +92,12 @@ namespace VendingMachineManagementAPI.Data
                 entity.HasOne(e => e.SimCard)
                     .WithOne(e => e.Modem)
                     .HasForeignKey<Modem>(e => e.SimCardID);
+                entity.HasOne(e => e.Company)
+                    .WithMany(e => e.Modems)
+                    .HasForeignKey(e => e.CompanyID);
+                entity.HasIndex(c => c.SerialNum)
+                    .IsUnique();
+
             });
 
             modelBuilder.Entity<OperatingMode>(entity =>
@@ -165,7 +171,10 @@ namespace VendingMachineManagementAPI.Data
                 entity.HasCheckConstraint("CK_PhoneNum", $"Number LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'");
                 entity.HasIndex(e => e.Number)
                 .IsUnique();
-                    
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(e => e.SimCards)
+                    .HasForeignKey(e => e.CompanyID);
             });
             
 

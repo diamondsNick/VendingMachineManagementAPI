@@ -27,10 +27,10 @@ namespace VendingMachineManagementAPI.Data
             await SeedModelsAsync(context);
             await SeedStatusesAsync(context);
             await SeedRolesAsync(context);
-            await SeedSimCardsAsync(context);
-            await SeedModemsAsync(context);
             await SeedManufacturersAsync(context);
             await SeedCompaniesAsync(context);
+            await SeedSimCardsAsync(context);
+            await SeedModemsAsync(context);
             await SeedWorkModesAsync(context);
             await SeedVendingMachinesAsync(context);
             await SeedProductsAsync(context);
@@ -43,8 +43,10 @@ namespace VendingMachineManagementAPI.Data
         }
         private static async Task SeedManufacturersAsync(ManagementDbContext context)
         {
+            
             if (!await context.Manufacturers.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Manufacturers', RESEED, 1)");
                 await context.Manufacturers.AddRangeAsync(
                     new Manufacturer { Name = "Saeco" },
                     new Manufacturer { Name = "Unicum" },
@@ -66,8 +68,10 @@ namespace VendingMachineManagementAPI.Data
         }
         private static async Task SeedModelsAsync(ManagementDbContext context)
         {
+            
             if (!await context.VendingMachineMatrices.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('VendingMachineMatrices', RESEED, 1)");
                 await context.VendingMachineMatrices.AddRangeAsync(
                     new VendingMachineMatrix { ManufacturerID = 1, ModelName = "Cristallo 400" },
                     new VendingMachineMatrix { ManufacturerID = 2, ModelName = "Rosso" },
@@ -91,8 +95,10 @@ namespace VendingMachineManagementAPI.Data
         }
         private static async Task SeedStatusesAsync(ManagementDbContext context)
         {
+            
             if (!await context.Statuses.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Statuses', RESEED, 1)");
                 await context.Statuses.AddRangeAsync(
                     new Status { Name = "Работает" },
                     new Status { Name = "На обслуживании" },
@@ -111,20 +117,23 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedSimCardsAsync(ManagementDbContext context)
         {
+            
             if (!await context.SimCards.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('SimCards', RESEED, 1)");
                 await context.SimCards.AddRangeAsync(
-                    new SimCard { Number = "79001234567", Vendor = "МТС", Balance = 1500.50m },
-                    new SimCard { Number = "79039876543", Vendor = "Билайн", Balance = 750.00m },
-                    new SimCard { Number = "79201112233", Vendor = "МегаФон", Balance = 2300.75m },
-                    new SimCard { Number = "79785556677", Vendor = "Теле2", Balance = 120.10m },
-                    new SimCard { Number = "79658765432", Vendor = "Ростелеком", Balance = 320.00m },
-                    new SimCard { Number = "79062223334", Vendor = "МТС", Balance = 5000.00m },
-                    new SimCard { Number = "79093334445", Vendor = "Билайн", Balance = 60.00m },
-                    new SimCard { Number = "79281239876", Vendor = "МегаФон", Balance = 980.35m },
-                    new SimCard { Number = "79765432109", Vendor = "Теле2", Balance = 410.00m },
-                    new SimCard { Number = "79615556677", Vendor = "Ростелеком", Balance = 1299.99m }
+                    new SimCard { Number = "79001234567", Vendor = "МТС", Balance = 1500.50m, CompanyID = 1 },
+                    new SimCard { Number = "79039876543", Vendor = "Билайн", Balance = 750.00m, CompanyID = 1 },
+                    new SimCard { Number = "79201112233", Vendor = "МегаФон", Balance = 2300.75m, CompanyID = 1 },
+                    new SimCard { Number = "79785556677", Vendor = "Теле2", Balance = 120.10m, CompanyID = 1 },
+                    new SimCard { Number = "79658765432", Vendor = "Ростелеком", Balance = 320.00m, CompanyID = 1 },
+                    new SimCard { Number = "79062223334", Vendor = "МТС", Balance = 5000.00m, CompanyID = 1 },
+                    new SimCard { Number = "79093334445", Vendor = "Билайн", Balance = 60.00m, CompanyID = 1 },
+                    new SimCard { Number = "79281239876", Vendor = "МегаФон", Balance = 980.35m, CompanyID = 1 },
+                    new SimCard { Number = "79765432109", Vendor = "Теле2", Balance = 410.00m, CompanyID = 1 },
+                    new SimCard { Number = "79615556677", Vendor = "Ростелеком", Balance = 1299.99m, CompanyID = 1 }
                 );
+
                 try
                 {
                     await context.SaveChangesAsync();
@@ -138,8 +147,10 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedWorkModesAsync(ManagementDbContext context)
         {
+            
             if (!await context.OperatingModes.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('OperatingModes', RESEED, 1)");
                 await context.OperatingModes.AddRangeAsync(
                     new OperatingMode { Name = "Обычный" },
                     new OperatingMode { Name = "Режим сна" },
@@ -160,8 +171,10 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedRolesAsync(ManagementDbContext context)
         {
+            
             if (!await context.Roles.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Roles', RESEED, 1)");
                 await context.Roles.AddRangeAsync(
                     new Role { Name = "Администратор" },
                     new Role { Name = "Техник" },
@@ -181,20 +194,23 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedModemsAsync(ManagementDbContext context)
         {
+            
             if (!await context.Modems.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Modems', RESEED, 1)");
                 await context.Modems.AddRangeAsync(
-                    new Modem { Model = "Huawei E8372", SimCardID = 1 },
-                    new Modem { Model = "ZTE MF920", SimCardID = 2 },
-                    new Modem { Model = "Alcatel LinkKey IK40V", SimCardID = 3 },
-                    new Modem { Model = "Huawei E3372h", SimCardID = 4 },
-                    new Modem { Model = "ZTE MF833V", SimCardID = 5 },
-                    new Modem { Model = "MikroTik SXT LTE6", SimCardID = 6 },
-                    new Modem { Model = "TP-Link M7200", SimCardID = 7 },
-                    new Modem { Model = "Keenetic Runner 4G", SimCardID = 8 },
-                    new Modem { Model = "Huawei B315s", SimCardID = 9 },
-                    new Modem { Model = "ZTE MF79U", SimCardID = 10 }
-                );
+                     new Modem { Model = "Huawei E8372", SimCardID = 1, CompanyID = 1, SerialNum = 1234567890, Password = "pass123" },
+                     new Modem { Model = "ZTE MF920", SimCardID = 2, CompanyID = 1, SerialNum = 2233445566, Password = "pass456" },
+                     new Modem { Model = "Alcatel LinkKey IK40V", SimCardID = 3, CompanyID = 2, SerialNum = 3344556677, Password = "alcatel789" },
+                     new Modem { Model = "Huawei E3372h", SimCardID = 4, CompanyID = 2, SerialNum = 4455667788, Password = "huawei789" },
+                     new Modem { Model = "ZTE MF833V", SimCardID = 5, CompanyID = 3, SerialNum = 5566778899, Password = "ztev900" },
+                     new Modem { Model = "MikroTik SXT LTE6", SimCardID = 6, CompanyID = 3, SerialNum = 6677889900, Password = "mikroT1k" },
+                     new Modem { Model = "TP-Link M7200", SimCardID = 7, CompanyID = 4, SerialNum = 7788990011, Password = "tplink001" },
+                     new Modem { Model = "Keenetic Runner 4G", SimCardID = 8, CompanyID = 5, SerialNum = 8899001122, Password = "runner4g" },
+                     new Modem { Model = "Huawei B315s", SimCardID = 9, CompanyID = 5, SerialNum = 9900112233, Password = "b315spass" },
+                     new Modem { Model = "ZTE MF79U", SimCardID = 10, CompanyID = 1, SerialNum = 1011121314, Password = "ztefinal" }
+                 );
+
                 try
                 {
                     await context.SaveChangesAsync();
@@ -208,8 +224,10 @@ namespace VendingMachineManagementAPI.Data
         }
         private static async Task SeedCompaniesAsync(ManagementDbContext context)
         {
+            
             if (!await context.Companies.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Companies', RESEED, 1)");
                 await context.Companies.AddRangeAsync(
                     new Company { Name = "КофеТайм ООО", Finances = 125000.00m, Phone = "79001234567", Adress = "г. Москва, ул. Ленина, д.10", RegistrationDate = "2020-03-15" },
                     new Company { Name = "ВендоПро", Finances = 84500.50m, Phone = "79039876543", Adress = "г. Санкт-Петербург, Невский пр., д. 25", RegistrationDate = "2019-07-01" },
@@ -235,8 +253,10 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedVendingMachinesAsync(ManagementDbContext context)
         {
+            
             if (!await context.VendingMachines.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('VendingMachines', RESEED, 1)");
                 await context.VendingMachines.AddRangeAsync(
                     new VendingMachine
                     {
@@ -396,8 +416,10 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedProductsAsync(ManagementDbContext context)
         {
+            
             if (!await context.Products.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Products', RESEED, 1)");
                 await context.Products.AddRangeAsync(
                     new Product { Name = "Чипсы Lays", Description = "Картофельные чипсы со вкусом сметаны и лука", AvgSales = 134.5f },
                     new Product { Name = "Шоколад Alpen Gold", Description = "Молочный шоколад с орехами", AvgSales = 87.2f },
@@ -423,8 +445,10 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedVendingAvaliability(ManagementDbContext context)
         {
+            
             if(!await context.VendingAvaliabilities.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('VendingAvaliabilities', RESEED, 1)");
                 await context.VendingAvaliabilities.AddRangeAsync(
                     new VendingAvaliability { VendingMachineID = 1, ProductID = 4, Quantity = 10, Price = 59.99m },
                     new VendingAvaliability { VendingMachineID = 1, ProductID = 5, Quantity = 20, Price = 9.99m },
@@ -463,6 +487,7 @@ namespace VendingMachineManagementAPI.Data
         {
             if(!await context.PaymentMethods.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('PaymentMethods', RESEED, 1)");
                 await context.PaymentMethods.AddRangeAsync(
                     new PaymentMethod { Name = "Безналичная" },
                     new PaymentMethod { Name = "Купюроприемник" },
@@ -508,6 +533,7 @@ namespace VendingMachineManagementAPI.Data
         {
             if (!await context.Sales.AnyAsync())
             {
+                await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Sales', RESEED, 1)");
                 await context.Sales.AddRangeAsync(
                     new Sale { VendingMachineID = 4, ProductID = 9, PaymentMethodID = 1, ProductAmount = 2, Cost = 25.98m, Deposit = 41.22m, Change = 15.24m, Date = DateTime.Parse("2025-06-08") },
                     new Sale { VendingMachineID = 5, ProductID = 3, PaymentMethodID = 2, ProductAmount = 3, Cost = 179.97m, Deposit = 193.22m, Change = 13.25m, Date = DateTime.Parse("2025-06-09") },

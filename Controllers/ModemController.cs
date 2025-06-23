@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers
@@ -44,9 +45,50 @@ namespace VendingMachineManagementAPI.Controllers
             return Ok(modem);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostModem(Modem modem)
+        [HttpGet("{amount:int}/{page:int}")]
+        public async Task<ActionResult<PagedModems>> GetPagedCompanies(int amount, int page, [FromQuery] long CompanyId)
         {
+            var query = _context.Modems.AsQueryable();
+
+            if (CompanyId != 0)
+            {
+                query = query.Where(c => c.CompanyID == CompanyId);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(c => c.ID)
+                .Skip((page - 1) * amount)
+                .Take(amount)
+            .ToListAsync();
+
+            if (items == null || items.Count == 0)
+            {
+                return NotFound("Page does not exist!");
+            }
+
+            var result = new PagedModems
+            {
+                Modems = items,
+                TotalCount = totalCount
+            };
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostModem(ModemCreateDTO modemInfo)
+        {
+            Modem modem = new()
+            {
+                ID = modemInfo.ID,
+                Model = modemInfo.Model,
+                SimCardID = modemInfo.SimCardID,
+                SerialNum = modemInfo.SerialNum,
+                Password = modemInfo.Password,
+                CompanyID = modemInfo.CompanyID
+            };
             try
             {
                 _context.Modems.Add(modem);
@@ -62,8 +104,17 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> PutModem(long Id, Modem modem)
+        public async Task<IActionResult> PutModem(long Id, ModemCreateDTO modemInfo)
         {
+            Modem modem = new()
+            {
+                ID = modemInfo.ID,
+                Model = modemInfo.Model,
+                SimCardID = modemInfo.SimCardID,
+                SerialNum = modemInfo.SerialNum,
+                Password = modemInfo.Password,
+                CompanyID = modemInfo.CompanyID
+            };
             if (Id != modem.ID) return BadRequest("Ids does not match!");
             if (!await IsModemExists(Id)) return NotFound();
             try

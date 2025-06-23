@@ -199,16 +199,16 @@ namespace VendingMachineManagementAPI.Data
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Modems', RESEED, 1)");
                 await context.Modems.AddRangeAsync(
-                     new Modem { Model = "Huawei E8372", SimCardID = 1, CompanyID = 1, SerialNum = 1234567890, Password = "pass123" },
-                     new Modem { Model = "ZTE MF920", SimCardID = 2, CompanyID = 1, SerialNum = 2233445566, Password = "pass456" },
-                     new Modem { Model = "Alcatel LinkKey IK40V", SimCardID = 3, CompanyID = 2, SerialNum = 3344556677, Password = "alcatel789" },
-                     new Modem { Model = "Huawei E3372h", SimCardID = 4, CompanyID = 2, SerialNum = 4455667788, Password = "huawei789" },
-                     new Modem { Model = "ZTE MF833V", SimCardID = 5, CompanyID = 3, SerialNum = 5566778899, Password = "ztev900" },
-                     new Modem { Model = "MikroTik SXT LTE6", SimCardID = 6, CompanyID = 3, SerialNum = 6677889900, Password = "mikroT1k" },
-                     new Modem { Model = "TP-Link M7200", SimCardID = 7, CompanyID = 4, SerialNum = 7788990011, Password = "tplink001" },
-                     new Modem { Model = "Keenetic Runner 4G", SimCardID = 8, CompanyID = 5, SerialNum = 8899001122, Password = "runner4g" },
-                     new Modem { Model = "Huawei B315s", SimCardID = 9, CompanyID = 5, SerialNum = 9900112233, Password = "b315spass" },
-                     new Modem { Model = "ZTE MF79U", SimCardID = 10, CompanyID = 1, SerialNum = 1011121314, Password = "ztefinal" }
+                    new Modem { Model = "Huawei E8372", SimCardID = 1, CompanyID = 1, SerialNum = 1234567890, Password = "pass123" },
+                    new Modem { Model = "ZTE MF920", SimCardID = 2, CompanyID = 1, SerialNum = 2233445566, Password = "pass456" },
+                    new Modem { Model = "Alcatel LinkKey IK40V", SimCardID = 3, CompanyID = 1, SerialNum = 3344556677, Password = "alcatel789" },
+                    new Modem { Model = "Huawei E3372h", SimCardID = 4, CompanyID = 1, SerialNum = 4455667788, Password = "huawei789" },
+                    new Modem { Model = "ZTE MF833V", SimCardID = 5, CompanyID = 1, SerialNum = 5566778899, Password = "ztev900" },
+                    new Modem { Model = "MikroTik SXT LTE6", SimCardID = 6, CompanyID = 1, SerialNum = 6677889900, Password = "mikroT1k" },
+                    new Modem { Model = "TP-Link M7200", SimCardID = 7, CompanyID = 1, SerialNum = 7788990011, Password = "tplink001" },
+                    new Modem { Model = "Keenetic Runner 4G", SimCardID = 8, CompanyID = 1, SerialNum = 8899001122, Password = "runner4g" },
+                    new Modem { Model = "Huawei B315s", SimCardID = 9, CompanyID = 1, SerialNum = 9900112233, Password = "b315spass" },
+                    new Modem { Model = "ZTE MF79U", SimCardID = 10, CompanyID = 1, SerialNum = 1011121314, Password = "ztefinal" }
                  );
 
                 try

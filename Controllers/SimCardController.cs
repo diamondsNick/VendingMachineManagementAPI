@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers
@@ -32,6 +33,41 @@ namespace VendingMachineManagementAPI.Controllers
             }
 
             return Ok(simCards);
+        }
+
+        [HttpGet("{amount:int}/{page:int}")]
+        public async Task<ActionResult<PagedSimCards>> GetPagedSims(int amount, int page, [FromQuery] long CompanyId, [FromQuery] bool linked)
+        {
+            var query = _context.SimCards.AsQueryable();
+
+            if (CompanyId != 0)
+            {
+                query = query.Where(c => c.CompanyID == CompanyId);
+            }
+            if (linked)
+            {
+                query = query.Where(sim => !_context.Modems.Any(m => m.SimCardID == sim.ID));
+            }
+                var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderBy(c => c.ID)
+                .Skip((page - 1) * amount)
+                .Take(amount)
+            .ToListAsync();
+
+            if (items == null || items.Count == 0)
+            {
+                return NotFound("Page does not exist!");
+            }
+
+            var result = new PagedSimCards
+            {
+                Sims = items,
+                TotalCount = totalCount
+            };
+
+            return Ok(result);
         }
 
         [HttpGet("{Id}")]

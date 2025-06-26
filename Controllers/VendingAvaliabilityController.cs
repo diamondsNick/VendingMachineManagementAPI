@@ -22,12 +22,17 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetVendingAvaliabilities()
+        public async Task<IActionResult> GetVendingAvaliabilities([FromQuery] long VendingMachineId = 0)
         {
-            var availabilities = await _context.VendingAvaliabilities
+            var availabilities = _context.VendingAvaliabilities.AsQueryable();
+            availabilities = availabilities
                 .Include(v => v.VendingMachine)
-                .Include(v => v.Product)
-                .ToListAsync();
+                .Include(v => v.Product);
+
+            if(VendingMachineId != 0)
+            {
+                availabilities = availabilities.Where(v => v.VendingMachineID == VendingMachineId);
+            }
 
             if (availabilities == null || !availabilities.Any())
             {

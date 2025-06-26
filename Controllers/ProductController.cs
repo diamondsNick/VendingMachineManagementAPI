@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VendingMachineManagementAPI.Controllers
 {
@@ -18,17 +20,37 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<ActionResult<ProductDTO>> GetProducts([FromQuery] int amount = 0, [FromQuery] int page = 0)
         {
 
-            var products = await _context.Products.ToListAsync();
+            var products = _context.Products.AsQueryable();
 
             if (products == null || !products.Any())
             {
                 return NotFound();
             }
+            var totalCount = await products.CountAsync();
 
-            return Ok(products);
+            if (page != 0 && amount !=0)
+            {
+                var res = await products
+                .OrderBy(p => p.ID)
+                .Skip((page - 1) * amount)
+                .Take(amount)
+                .ToListAsync();
+            }
+            else
+            {
+                var res = await products.ToListAsync();
+            }
+
+            var result = new ProductDTO
+            {
+                Products = products.ToList(),
+                TotalCount = totalCount
+            };
+
+            return Ok(result);
         }
 
         [HttpGet("{Id}")]

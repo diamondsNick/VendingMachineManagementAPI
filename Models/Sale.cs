@@ -18,11 +18,11 @@ namespace VendingMachineManagementAPI.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Change { get; set; }
         public DateTime Date { get; set; }
-        [JsonIgnore]
+        
         public PaymentMethod PaymentMethod { get; set; }
-        [JsonIgnore]
+        
         public VendingMachine VendingMachine { get; set; }
-        [JsonIgnore]
+        
         public Product Product { get; set; }
     }
 }

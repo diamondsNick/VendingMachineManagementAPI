@@ -17,9 +17,9 @@ namespace VendingMachineManagementAPI.Models
         [MaxLength(250)]
         [AllowNull]
         public string ProblemDescription { get; set; }
-        [JsonIgnore]
+        
         public User Maintainer { get; set; }
-        [JsonIgnore]
+        
         public VendingMachine VendingMachine { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace VendingMachineManagementAPI.DTOs
 {
-    public class ModemCreateDTO
+    public class ModemDTO
     {
         public long ID { get; set; }
         [MaxLength(100)]

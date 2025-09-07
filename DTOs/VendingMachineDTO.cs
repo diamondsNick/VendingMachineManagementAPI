@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace VendingMachineManagementAPI.DTOs
 {
-    public class VendingMachineCreateDTO
+    public class VendingMachineDTO
     {
         public long ID { get; set; }
         public long? StatusID { get; set; }
@@ -13,27 +13,27 @@ namespace VendingMachineManagementAPI.DTOs
         public long? ModemID { get; set; }
         [MaxLength(100)]
         [Required]
-        public string? TimeZone { get; set; }
+        public string TimeZone { get; set; }
         [MaxLength(100)]
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
         [MaxLength(350)]
         [Required]
-        public string? Adress { get; set; }
+        public string Adress { get; set; }
         [MaxLength(100)]
         [AllowNull]
-        public string? Coordinates { get; set; }
+        public string Coordinates { get; set; }
         [MaxLength(100)]
         [Required]
-        public string? PlacementType { get; set; }
+        public string PlacementType { get; set; }
         [MaxLength(19)]
         [Required]
-        public string? PlacementDate { get; set; }
+        public string PlacementDate { get; set; }
         [MaxLength(5)]
         [Required]
-        public string? StartHours { get; set; }
+        public string StartHours { get; set; }
         [MaxLength(5)]
         [Required]
-        public string? EndHours { get; set; }
+        public string EndHours { get; set; }
     }
 }

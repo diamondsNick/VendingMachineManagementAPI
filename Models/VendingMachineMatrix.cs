@@ -10,7 +10,7 @@ namespace VendingMachineManagementAPI.Models
         public long? ManufacturerID { get; set; }
         [MaxLength (150)]
         public string ModelName { get; set; }
-        [JsonIgnore]
+        
         public IList<VendingMachine> VendingMachines { get; set; }
         public Manufacturer Manufacturer { get; set; }
     }

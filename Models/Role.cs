@@ -10,7 +10,7 @@ namespace VendingMachineManagementAPI.Models
         [MaxLength (30)]
         [Required]
         public string Name { get; set; }
-        [JsonIgnore]
+        
         public IList<User> Users { get; set; }
     }
 }

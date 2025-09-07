@@ -6,9 +6,9 @@ namespace VendingMachineManagementAPI.Models
     {
         public long VendingMachineID { get; set; }
         public long PaymentMethodID { get; set; }
-        [JsonIgnore]
+        
         public VendingMachine VendingMachine { get; set; }
-        [JsonIgnore]
+        
         public PaymentMethod PaymentMethod { get; set; }
     }
 }

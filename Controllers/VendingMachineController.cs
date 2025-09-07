@@ -112,7 +112,7 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostVendingMachine(VendingMachineCreateDTO machine)
+        public async Task<IActionResult> PostVendingMachine(VendingMachineDTO machine)
         {
             VendingMachine vendingMachine = new VendingMachine
             {
@@ -147,7 +147,7 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> PutVendingMachine(long Id, VendingMachineCreateDTO machine)
+        public async Task<IActionResult> PutVendingMachine(long Id, VendingMachineDTO machine)
         {
             if (Id != machine.ID) return BadRequest("Ids do not match!");
             if (!await IsVendingMachineExists(Id)) return NotFound();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,14 +34,14 @@ namespace VendingMachineManagementAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "VendingMachineManagementAPI", Version = "v1" });
+                c.SwaggerDoc("v2", new OpenApiInfo { Title = "VendingMachineManagementAPI", Version = "v2" });
             });
             services.AddDbContext<ManagementDbContext>(options => 
                     options.UseSqlServer(Configuration.GetConnectionString("Default"))
             );
             services.AddDbContext<ManagementDbContext>(options => options.EnableDetailedErrors());
-            
 
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

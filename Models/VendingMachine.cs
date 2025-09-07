@@ -39,19 +39,19 @@ namespace VendingMachineManagementAPI.Models
         [MaxLength(5)]
         [Required]
         public string EndHours { get; set; }
-        [JsonIgnore]
+        
         public IList<MachinePaymentMethod> MachinePaymentMethods { get; set; }
         public Status Status { get; set; }
         public Modem Modem { get; set; }
-        [JsonIgnore]
+        
         public IList<Sale> Sales { get; set; }
-        [JsonIgnore]
+        
         public OperatingMode OperatingMode { get; set; }
-        [JsonIgnore]
+        
         public IList<Maintenance> Maintenances { get; set; }
-        [JsonIgnore]
+        
         public IList<VendingMachineMoney> VendingMachineMoney { get; set; }
-        [JsonIgnore]
+        
         public IList<VendingAvaliability> VendingAvaliabilities { get; set; }
         public VendingMachineMatrix VendingMachineMatrix { get; set; }
         public Company Company { get; set; }

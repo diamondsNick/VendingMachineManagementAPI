@@ -22,13 +22,13 @@ namespace VendingMachineManagementAPI.Models
         public string RegistrationDate { get; set; }
         [AllowNull]
         public long? ParentCompanyID { get; set; }
-        [JsonIgnore]
+        
         public IList<User> CompanyUsers { get; set; }
-        [JsonIgnore]
+        
         public IList<VendingMachine> VendingMachines { get; set; }
-        [JsonIgnore]
+        
         public IList<Modem> Modems { get; set; }
-        [JsonIgnore]
+        
         public IList<SimCard> SimCards { get; set; }
     }
 }

@@ -78,7 +78,7 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostModem(ModemCreateDTO modemInfo)
+        public async Task<IActionResult> PostModem(ModemDTO modemInfo)
         {
             Modem modem = new()
             {
@@ -104,7 +104,7 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> PutModem(long Id, ModemCreateDTO modemInfo)
+        public async Task<IActionResult> PutModem(long Id, ModemDTO modemInfo)
         {
             Modem modem = new()
             {

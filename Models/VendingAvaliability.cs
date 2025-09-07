@@ -11,9 +11,9 @@ namespace VendingMachineManagementAPI.Models
         public byte Quantity { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
-        [JsonIgnore]
+        
         public VendingMachine VendingMachine { get; set; }
-        [JsonIgnore]
+        
         public Product Product { get; set; }
     }
 }

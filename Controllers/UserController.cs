@@ -85,7 +85,7 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostUser(PagedUsersCreateDTO userDTO)
+        public async Task<IActionResult> PostUser(UserDTO userDTO)
         {
             User user = new User();
             try
@@ -117,7 +117,7 @@ namespace VendingMachineManagementAPI.Controllers
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> PutUser(long Id, PagedUsersCreateDTO userDTO)
+        public async Task<IActionResult> PutUser(long Id, UserDTO userDTO)
         {
             User user = new User()
             {

@@ -33,7 +33,7 @@ namespace VendingMachineManagementAPI.Models
         public Role Role { get; set; }
         
         public Company Company { get; set; }
-        [JsonIgnore]
+        
         public IList<Maintenance> Maintenances { get; set; }
     }
 }

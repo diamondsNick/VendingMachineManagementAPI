@@ -15,10 +15,10 @@ namespace VendingMachineManagementAPI.Models
         public string Vendor { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Balance { get; set; }
-        [JsonIgnore]
+        
         public Modem Modem { get; set; }
         public long? CompanyID { get; set; }
-        [JsonIgnore]
+        
         public Company Company { get; set; }
     }
 }

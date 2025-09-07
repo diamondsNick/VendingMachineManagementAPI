@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using VendingMachineManagementAPI.Data;
 
-namespace VendingMachineManagementAPI.Controllers
+namespace VendingMachineManagementAPI.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class AuthentificationController : ControllerBase
     {

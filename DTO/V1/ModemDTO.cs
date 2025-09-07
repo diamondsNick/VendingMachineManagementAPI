@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace VendingMachineManagementAPI.DTOs
+namespace VendingMachineManagementAPI.DTOs.V1
 {
     public class ModemDTO
     {

@@ -10,9 +10,9 @@ using VendingMachineManagementAPI.Data;
 using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.Models;
 
-namespace VendingMachineManagementAPI.Controllers
+namespace VendingMachineManagementAPI.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class SimCardController : Controller
     {

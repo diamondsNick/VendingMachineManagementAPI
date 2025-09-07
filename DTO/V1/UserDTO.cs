@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using VendingMachineManagementAPI.Models;
 
-namespace VendingMachineManagementAPI.DTOs
+namespace VendingMachineManagementAPI.DTOs.V1
 {
     public class UserDTO
     {

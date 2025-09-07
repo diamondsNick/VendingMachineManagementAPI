@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
 
-namespace VendingMachineManagementAPI.Controllers
+namespace VendingMachineManagementAPI.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class BaseController <TEntity, TDTO, TKey> : ControllerBase
         where TEntity: class

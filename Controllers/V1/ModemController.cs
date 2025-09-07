@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
-using VendingMachineManagementAPI.DTOs;
+using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
 
-namespace VendingMachineManagementAPI.Controllers
+namespace VendingMachineManagementAPI.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ModemController : Controller
     {

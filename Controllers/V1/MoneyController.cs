@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
 using VendingMachineManagementAPI.Models;
 
-namespace VendingMachineManagementAPI.Controllers
+namespace VendingMachineManagementAPI.Controllers.V1
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class MoneyController : Controller
     {

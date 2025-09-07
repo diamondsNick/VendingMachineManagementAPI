@@ -14,11 +14,10 @@ namespace VendingMachineManagementAPI.Models
         public long? CompanyID { get; set; }
         public long? SerialNum { get; set; }
         public string Password { get; set; }
-        
-        public SimCard? SimCard { get; set; }
-        
+        [AllowNull]
+        public SimCard SimCard { get; set; }
         public VendingMachine VendingMachine { get; set; }
-
-        public Company? Company { get; set; }
+        [AllowNull]
+        public Company Company { get; set; }
     }
 }

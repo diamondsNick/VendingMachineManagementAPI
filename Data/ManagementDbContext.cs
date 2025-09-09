@@ -25,7 +25,7 @@ namespace VendingMachineManagementAPI.Data
         public DbSet<SimCard> SimCards { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<VendingAvaliability> VendingAvaliabilities { get; set; }
+        public DbSet<VendingAvailability> VendingAvaliabilities { get; set; }
         public DbSet<VendingMachine> VendingMachines { get; set; }
         public DbSet<VendingMachineMatrix> VendingMachineMatrices { get; set; }
         public DbSet<VendingMachineMoney> VendingMachineMoney { get; set; }
@@ -206,7 +206,7 @@ namespace VendingMachineManagementAPI.Data
                     .IsUnique();
             });
 
-            modelBuilder.Entity<VendingAvaliability>(entity =>
+            modelBuilder.Entity<VendingAvailability>(entity =>
             {
                 entity.HasKey(e => e.ID);
 

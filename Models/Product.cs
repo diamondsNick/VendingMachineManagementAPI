@@ -16,6 +16,6 @@ namespace VendingMachineManagementAPI.Models
         public string Description { get; set; }
         public float AvgSales { get; set; }
         public List<Sale> Sales { get; set; }
-        public List<VendingAvaliability> VendingAvaliabilities { get; set; }
+        public List<VendingAvailability> VendingAvaliabilities { get; set; }
     }
 }

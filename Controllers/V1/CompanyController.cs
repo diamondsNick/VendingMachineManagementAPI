@@ -7,6 +7,7 @@ using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
 using VendingMachineManagementAPI.DTOs;
+using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers.V1
@@ -42,7 +43,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpGet("{amount:int}/{page:int}")]
-        public async Task<ActionResult<PagedCompanies>> GetPagedCompanies(int amount, int page, [FromQuery] long parentCompanyId)
+        public async Task<ActionResult<CompanyDTO>> GetPagedCompanies(int amount, int page, [FromQuery] long parentCompanyId)
         {
             var query = _context.Companies.AsQueryable();
 

@@ -1,22 +1,18 @@
-﻿using System.Collections;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
-namespace VendingMachineManagementAPI.Models
+namespace VendingMachineManagementAPI.DTO.V1
 {
-    public class SimCard
+    public class SimCardDTO
     {
         public long ID { get; set; }
         [MaxLength(11)]
         public string Number { get; set; }
-        [MaxLength (25)]
+        [MaxLength(25)]
         [Required]
         public string Vendor { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Balance { get; set; }
         public long? CompanyID { get; set; }
-        public Modem Modem { get; set; }
-        public Company Company { get; set; }
     }
 }

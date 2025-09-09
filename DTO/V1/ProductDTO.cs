@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VendingMachineManagementAPI.DTOs.V1
+namespace VendingMachineManagementAPI.DTO.V1
 {
-    public class Product
+    public class ProductDTO
     {
         public long ID { get; set; }
         [MaxLength(100)]

@@ -450,25 +450,25 @@ namespace VendingMachineManagementAPI.Data
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('VendingAvaliabilities', RESEED, 1)");
                 await context.VendingAvaliabilities.AddRangeAsync(
-                    new VendingAvaliability { VendingMachineID = 1, ProductID = 4, Quantity = 10, Price = 59.99m },
-                    new VendingAvaliability { VendingMachineID = 1, ProductID = 5, Quantity = 20, Price = 9.99m },
-                    new VendingAvaliability { VendingMachineID = 2, ProductID = 1, Quantity = 15, Price = 299.99m },
-                    new VendingAvaliability { VendingMachineID = 2, ProductID = 4, Quantity = 15, Price = 59.99m },
-                    new VendingAvaliability { VendingMachineID = 3, ProductID = 3, Quantity = 10, Price = 59.99m },
-                    new VendingAvaliability { VendingMachineID = 3, ProductID = 8, Quantity = 10, Price = 59.99m },
-                    new VendingAvaliability { VendingMachineID = 4, ProductID = 6, Quantity = 25, Price = 60.00m },
-                    new VendingAvaliability { VendingMachineID = 4, ProductID = 8, Quantity = 10, Price = 59.99m },
-                    new VendingAvaliability { VendingMachineID = 4, ProductID = 10, Quantity = 12, Price = 19.00m },
-                    new VendingAvaliability { VendingMachineID = 5, ProductID = 3, Quantity = 20, Price = 59.99m },
-                    new VendingAvaliability { VendingMachineID = 5, ProductID = 10, Quantity = 20, Price = 19.00m },
-                    new VendingAvaliability { VendingMachineID = 5, ProductID = 9, Quantity = 12, Price = 12.99m },
-                    new VendingAvaliability { VendingMachineID = 5, ProductID = 6, Quantity = 10, Price = 60.00m },
-                    new VendingAvaliability { VendingMachineID = 6, ProductID = 5, Quantity = 20, Price = 9.99m },
-                    new VendingAvaliability { VendingMachineID = 6, ProductID = 7, Quantity = 10, Price = 49.50m },
-                    new VendingAvaliability { VendingMachineID = 6, ProductID = 10, Quantity = 8, Price = 19.00m },
-                    new VendingAvaliability { VendingMachineID = 7, ProductID = 1, Quantity = 15, Price = 299.99m },
-                    new VendingAvaliability { VendingMachineID = 7, ProductID = 6, Quantity = 20, Price = 60.00m },
-                    new VendingAvaliability { VendingMachineID = 7, ProductID = 3, Quantity = 10, Price = 59.99m }
+                    new VendingAvailability { VendingMachineID = 1, ProductID = 4, Quantity = 10, Price = 59.99m },
+                    new VendingAvailability { VendingMachineID = 1, ProductID = 5, Quantity = 20, Price = 9.99m },
+                    new VendingAvailability { VendingMachineID = 2, ProductID = 1, Quantity = 15, Price = 299.99m },
+                    new VendingAvailability { VendingMachineID = 2, ProductID = 4, Quantity = 15, Price = 59.99m },
+                    new VendingAvailability { VendingMachineID = 3, ProductID = 3, Quantity = 10, Price = 59.99m },
+                    new VendingAvailability { VendingMachineID = 3, ProductID = 8, Quantity = 10, Price = 59.99m },
+                    new VendingAvailability { VendingMachineID = 4, ProductID = 6, Quantity = 25, Price = 60.00m },
+                    new VendingAvailability { VendingMachineID = 4, ProductID = 8, Quantity = 10, Price = 59.99m },
+                    new VendingAvailability { VendingMachineID = 4, ProductID = 10, Quantity = 12, Price = 19.00m },
+                    new VendingAvailability { VendingMachineID = 5, ProductID = 3, Quantity = 20, Price = 59.99m },
+                    new VendingAvailability { VendingMachineID = 5, ProductID = 10, Quantity = 20, Price = 19.00m },
+                    new VendingAvailability { VendingMachineID = 5, ProductID = 9, Quantity = 12, Price = 12.99m },
+                    new VendingAvailability { VendingMachineID = 5, ProductID = 6, Quantity = 10, Price = 60.00m },
+                    new VendingAvailability { VendingMachineID = 6, ProductID = 5, Quantity = 20, Price = 9.99m },
+                    new VendingAvailability { VendingMachineID = 6, ProductID = 7, Quantity = 10, Price = 49.50m },
+                    new VendingAvailability { VendingMachineID = 6, ProductID = 10, Quantity = 8, Price = 19.00m },
+                    new VendingAvailability { VendingMachineID = 7, ProductID = 1, Quantity = 15, Price = 299.99m },
+                    new VendingAvailability { VendingMachineID = 7, ProductID = 6, Quantity = 20, Price = 60.00m },
+                    new VendingAvailability { VendingMachineID = 7, ProductID = 3, Quantity = 10, Price = 59.99m }
 
                     );
                 try

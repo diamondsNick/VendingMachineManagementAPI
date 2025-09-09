@@ -59,7 +59,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostVendingAvaliability(VendingAvaliability availability)
+        public async Task<IActionResult> PostVendingAvaliability(VendingAvailability availability)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> PutVendingAvaliability(long Id, VendingAvaliability availability)
+        public async Task<IActionResult> PutVendingAvaliability(long Id, VendingAvailability availability)
         {
             if (Id != availability.ID) return BadRequest("Ids does not match!");
             if (!await IsVendingAvaliabilityExists(Id)) return NotFound();

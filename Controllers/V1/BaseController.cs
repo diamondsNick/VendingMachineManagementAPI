@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Any;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +10,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class BaseController<TEntity, TDTO, TKey> : ControllerBase
+    public abstract class BaseController<TEntity, TDTO, TKey> : ControllerBase
         where TEntity : class
     {
         private readonly ManagementDbContext _context;
@@ -38,11 +36,38 @@ namespace VendingMachineManagementAPI.Controllers.V1
             return Ok(mapped);
         }
 
-        [HttpPut]
-        public virtual async Task<ActionResult<TEntity>> PutEntity([FromBody] TDTO)
+        [HttpPost]
+        public virtual async Task<ActionResult<TDTO>> PostEntity()
         {
-            if
+
         }
+
+        [HttpPut("{ID}")]
+        public virtual async Task<ActionResult<TDTO>> PutEntity([FromRoute] TKey ID, [FromBody] TDTO entity)
+        {
+            if (entity == null) return BadRequest("Request body is empty");
+
+            if (!ID.Equals(GetKey(entity))) return BadRequest("IDs does not match");
+
+            var storedEntity = await _dbSet.FindAsync(ID);
+
+            if (storedEntity == null) return NotFound("Object was not found");
+
+            try
+            {
+                _mapper.Map(entity, storedEntity);
+
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch
+            {
+                return Problem("Internal server error",statusCode:500);
+            }
+        }
+
+        protected abstract TKey GetKey(TDTO entity);
 
     }
 }

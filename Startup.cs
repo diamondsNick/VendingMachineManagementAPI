@@ -25,12 +25,13 @@ namespace VendingMachineManagementAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v2", new OpenApiInfo { Title = "VendingMachineManagementAPI", Version = "v2" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "VendingMachineManagementAPI", Version = "v1" });
             });
             services.AddDbContext<ManagementDbContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("Default"))
-            );
-            services.AddDbContext<ManagementDbContext>(options => options.EnableDetailedErrors());
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Laptop"));
+                options.EnableDetailedErrors();
+            });
 
             services.AddAutoMapper(typeof(Startup));
         }

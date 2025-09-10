@@ -1,14 +1,13 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
     public class Maintenance
     {
         public long ID { get; set; }
-        public long VendingMachineID { get; set; } 
+        public long VendingMachineID { get; set; }
         public long? MaintainerID { get; set; }
         public DateTime MaintenanceDate { get; set; }
         [AllowNull]
@@ -17,9 +16,9 @@ namespace VendingMachineManagementAPI.Models
         [MaxLength(250)]
         [AllowNull]
         public string ProblemDescription { get; set; }
-        
+
         public User Maintainer { get; set; }
-        
+
         public VendingMachine VendingMachine { get; set; }
     }
 }

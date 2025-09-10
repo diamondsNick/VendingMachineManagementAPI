@@ -1,13 +1,9 @@
-﻿using System.Collections;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using VendingMachineManagementAPI.Data;
-using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers.V1
@@ -48,7 +44,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
             {
                 query = query.Where(sim => !_context.Modems.Any(m => m.SimCardID == sim.ID));
             }
-                var totalCount = await query.CountAsync();
+            var totalCount = await query.CountAsync();
 
             var items = await query
                 .OrderBy(c => c.ID)

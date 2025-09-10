@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace VendingMachineManagementAPI.Models
+﻿namespace VendingMachineManagementAPI.Models
 {
     public class VendingMachineMoney
     {

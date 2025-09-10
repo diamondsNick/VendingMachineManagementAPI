@@ -6,7 +6,7 @@ namespace VendingMachineManagementAPI.Models
     public class Money
     {
         public long ID { get; set; }
-        [MaxLength (45)]
+        [MaxLength(45)]
         [Required]
         public string Name { get; set; }
         [Column(TypeName = "decimal(18,2)")]

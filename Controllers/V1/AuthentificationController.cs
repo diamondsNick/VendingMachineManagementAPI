@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
+using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
 
 namespace VendingMachineManagementAPI.Controllers.V1

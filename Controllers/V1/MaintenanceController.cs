@@ -74,8 +74,8 @@ namespace VendingMachineManagementAPI.Controllers.V1
 
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteMaintenance(long Id)
-        { 
-            if(!await MaintenaceExists(Id)) return NotFound();
+        {
+            if (!await MaintenaceExists(Id)) return NotFound();
             try
             {
                 var maintenance = await _context.Maintenances.FindAsync(Id);

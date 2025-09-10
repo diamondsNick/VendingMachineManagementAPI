@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
-using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
 

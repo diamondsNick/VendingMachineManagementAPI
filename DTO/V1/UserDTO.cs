@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.DTOs.V1
 {

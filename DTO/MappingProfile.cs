@@ -25,7 +25,7 @@ namespace VendingMachineManagementAPI.DTOs
             CreateMap<ModemDTO, Modem>();
 
             CreateMap<Money, MoneyDTO>();
-            CreateMap<MoneyDTO, Money>(); 
+            CreateMap<MoneyDTO, Money>();
 
             CreateMap<OperatingMode, OperatingModeDTO>();
             CreateMap<OperatingModeDTO, OperatingMode>();

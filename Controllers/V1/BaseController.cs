@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,8 +38,28 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpPost]
-        public virtual async Task<ActionResult<TDTO>> PostEntity()
+        public virtual async Task<ActionResult<TDTO>> PostEntity([FromBody] TDTO entity)
         {
+            if (entity == null) return BadRequest("Body value cannot be null");
+
+            try
+            {
+                var res = _mapper.Map<TEntity>(entity);
+
+                await _dbSet.AddAsync(res);
+
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(PostEntity), res);
+            }
+            catch (DbUpdateException)
+            {
+                return Problem("Internal DB error", statusCode: 500);
+            }
+            catch (Exception)
+            {
+                return Problem("Internal server error", statusCode: 500);
+            }
 
         }
 
@@ -63,7 +84,34 @@ namespace VendingMachineManagementAPI.Controllers.V1
             }
             catch
             {
-                return Problem("Internal server error",statusCode:500);
+                return Problem("Internal server error", statusCode: 500);
+            }
+        }
+
+        [HttpDelete("{ID}")]
+        public virtual async Task<ActionResult> DeleteEntity([FromRoute] TKey ID)
+        {
+            if (ID == null) return BadRequest("ID value cannot be null");
+
+            var deleted = await _dbSet.FindAsync(ID);
+
+            if (deleted == null) return NotFound("Object was not found");
+
+            try
+            {
+                _dbSet.Remove(deleted);
+
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+            catch (DbUpdateException)
+            {
+                return Problem("Internal DB error", statusCode: 500);
+            }
+            catch (Exception)
+            {
+                return Problem("Internal server error", statusCode: 500);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -11,9 +10,9 @@ namespace VendingMachineManagementAPI.Models
         public byte Quantity { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
-        
+
         public VendingMachine VendingMachine { get; set; }
-        
+
         public Product Product { get; set; }
     }
 }

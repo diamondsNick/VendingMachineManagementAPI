@@ -1,9 +1,7 @@
-﻿using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
 using VendingMachineManagementAPI.Models;
 
@@ -83,7 +81,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
         [HttpDelete("{VendingMachineID}/{PaymentMethodID}")]
         public async Task<ActionResult> DeleteMachinePaymentMethod(long VendingMachineID, long PaymentMethodID)
         {
-            if(!await IsMethodExists(VendingMachineID, PaymentMethodID))
+            if (!await IsMethodExists(VendingMachineID, PaymentMethodID))
                 return NotFound();
             var metod = await _context.MachinePaymentMethods.FirstOrDefaultAsync(e => e.VendingMachineID == VendingMachineID && e.PaymentMethodID == PaymentMethodID);
             try
@@ -91,7 +89,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
                 _context.MachinePaymentMethods.Remove(metod);
                 await _context.SaveChangesAsync();
             }
-            catch(DbUpdateConcurrencyException) { throw; }
+            catch (DbUpdateConcurrencyException) { throw; }
             return Ok();
         }
 

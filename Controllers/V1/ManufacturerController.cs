@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.SymbolStore;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
 using VendingMachineManagementAPI.Models;
 
@@ -79,14 +76,14 @@ namespace VendingMachineManagementAPI.Controllers.V1
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteManufacturer(long Id)
         {
-            if(!await IsManufacturerExists(Id)) return NotFound();
+            if (!await IsManufacturerExists(Id)) return NotFound();
             try
             {
                 var manufacturer = await _context.Manufacturers.FindAsync(Id);
                 _context.Manufacturers.Remove(manufacturer);
                 await _context.SaveChangesAsync();
             }
-            catch(DBConcurrencyException) { throw; }
+            catch (DBConcurrencyException) { throw; }
             return Ok();
         }
         private async Task<bool> IsManufacturerExists(long Id)

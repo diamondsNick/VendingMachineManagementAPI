@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading.Tasks;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Data
@@ -43,7 +42,7 @@ namespace VendingMachineManagementAPI.Data
         }
         private static async Task SeedManufacturersAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.Manufacturers.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Manufacturers', RESEED, 1)");
@@ -68,7 +67,7 @@ namespace VendingMachineManagementAPI.Data
         }
         private static async Task SeedModelsAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.VendingMachineMatrices.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('VendingMachineMatrices', RESEED, 1)");
@@ -95,7 +94,7 @@ namespace VendingMachineManagementAPI.Data
         }
         private static async Task SeedStatusesAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.Statuses.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Statuses', RESEED, 1)");
@@ -117,7 +116,7 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedSimCardsAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.SimCards.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('SimCards', RESEED, 1)");
@@ -147,7 +146,7 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedWorkModesAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.OperatingModes.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('OperatingModes', RESEED, 1)");
@@ -171,7 +170,7 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedRolesAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.Roles.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Roles', RESEED, 1)");
@@ -194,7 +193,7 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedModemsAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.Modems.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Modems', RESEED, 1)");
@@ -224,7 +223,7 @@ namespace VendingMachineManagementAPI.Data
         }
         private static async Task SeedCompaniesAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.Companies.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Companies', RESEED, 1)");
@@ -253,7 +252,7 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedVendingMachinesAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.VendingMachines.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('VendingMachines', RESEED, 1)");
@@ -416,7 +415,7 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedProductsAsync(ManagementDbContext context)
         {
-            
+
             if (!await context.Products.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('Products', RESEED, 1)");
@@ -445,8 +444,8 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedVendingAvaliability(ManagementDbContext context)
         {
-            
-            if(!await context.VendingAvaliabilities.AnyAsync())
+
+            if (!await context.VendingAvaliabilities.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('VendingAvaliabilities', RESEED, 1)");
                 await context.VendingAvaliabilities.AddRangeAsync(
@@ -485,7 +484,7 @@ namespace VendingMachineManagementAPI.Data
 
         private static async Task SeedPaymentMethodes(ManagementDbContext context)
         {
-            if(!await context.PaymentMethods.AnyAsync())
+            if (!await context.PaymentMethods.AnyAsync())
             {
                 await context.Database.ExecuteSqlRawAsync("DBCC CHECKIDENT ('PaymentMethods', RESEED, 1)");
                 await context.PaymentMethods.AddRangeAsync(
@@ -502,7 +501,7 @@ namespace VendingMachineManagementAPI.Data
                 {
                     throw;
                 }
-                
+
             }
         }
         private static async Task SeedVendingMachinePaymentMethodsAsync(ManagementDbContext context)
@@ -594,7 +593,7 @@ namespace VendingMachineManagementAPI.Data
                 {
                     throw;
                 }
-                
+
             }
         }
     }

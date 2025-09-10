@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System;
-using System.Text.Json.Serialization;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -18,11 +17,11 @@ namespace VendingMachineManagementAPI.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Change { get; set; }
         public DateTime Date { get; set; }
-        
+
         public PaymentMethod PaymentMethod { get; set; }
-        
+
         public VendingMachine VendingMachine { get; set; }
-        
+
         public Product Product { get; set; }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System.Collections;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using VendingMachineManagementAPI.Data;
 using VendingMachineManagementAPI.Models;
 
@@ -15,7 +12,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
     [ApiController]
     public class VendingAvaliabilityController : Controller
     {
-    private readonly ManagementDbContext _context;
+        private readonly ManagementDbContext _context;
         public VendingAvaliabilityController(ManagementDbContext context)
         {
             _context = context;
@@ -29,7 +26,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
                 .Include(v => v.VendingMachine)
                 .Include(v => v.Product);
 
-            if(VendingMachineId != 0)
+            if (VendingMachineId != 0)
             {
                 availabilities = availabilities.Where(v => v.VendingMachineID == VendingMachineId);
             }

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using VendingMachineManagementAPI.Models;
 
@@ -9,12 +8,12 @@ namespace VendingMachineManagementAPI.Data
     {
         public ManagementDbContext(DbContextOptions<ManagementDbContext> options) : base(options)
         {
-            
+
         }
-        public DbSet<Company> Companies { get; set; }                  
+        public DbSet<Company> Companies { get; set; }
         public DbSet<MachinePaymentMethod> MachinePaymentMethods { get; set; }
         public DbSet<Maintenance> Maintenances { get; set; }
-        public DbSet<Manufacturer> Manufacturers{ get; set; }
+        public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Modem> Modems { get; set; }
         public DbSet<Money> Money { get; set; }
         public DbSet<OperatingMode> OperatingModes { get; set; }
@@ -171,12 +170,12 @@ namespace VendingMachineManagementAPI.Data
                 entity.HasCheckConstraint("CK_PhoneNum", $"Number LIKE '[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'");
                 entity.HasIndex(e => e.Number)
                 .IsUnique();
-                
+
                 entity.HasOne(e => e.Company)
                     .WithMany(e => e.SimCards)
                     .HasForeignKey(e => e.CompanyID);
             });
-            
+
 
             modelBuilder.Entity<Status>(entity =>
             {

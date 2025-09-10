@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.SymbolStore;
-using System.Drawing;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
 using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
@@ -49,11 +44,11 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpGet("{CompanyId:long}/{amount:int}/{page:int}")]
-        public async Task<IActionResult> GetPagedMachines(long CompanyId,int amount, int page)
+        public async Task<IActionResult> GetPagedMachines(long CompanyId, int amount, int page)
         {
-            
+
             var machines = await _context.VendingMachines
-                
+
                 .Include(vm => vm.Status)
                 .Include(vm => vm.OperatingMode)
                 .Include(vm => vm.Company)

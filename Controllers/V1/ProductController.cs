@@ -3,9 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
-using VendingMachineManagementAPI.DTOs;
 using VendingMachineManagementAPI.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace VendingMachineManagementAPI.Controllers.V1
 {
@@ -31,7 +29,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
             }
             var totalCount = await products.CountAsync();
 
-            if (page != 0 && amount !=0)
+            if (page != 0 && amount != 0)
             {
                 var res = await products
                 .OrderBy(p => p.ID)

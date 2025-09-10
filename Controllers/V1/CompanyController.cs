@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTO;
 using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
 
@@ -11,32 +13,13 @@ namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class CompaniesController : ControllerBase
+    public class CompaniesController : BaseController<Company, CompanyDTO, long>
     {
-        private readonly ManagementDbContext _context;
+        public CompaniesController(ManagementDbContext context, IMapper mapper) : base(context, mapper){}
 
-        public CompaniesController(ManagementDbContext context)
+        protected override long GetKey(CompanyDTO entity)
         {
-            _context = context;
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
-        {
-            return await _context.Companies.ToListAsync();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(long id)
-        {
-            var company = await _context.Companies.FindAsync(id);
-
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            return company;
+            return entity.ID;
         }
 
         [HttpGet("{amount:int}/{page:int}")]
@@ -62,71 +45,18 @@ namespace VendingMachineManagementAPI.Controllers.V1
                 return NotFound("Page does not exist!");
             }
 
-            var result = new PagedCompanies
+            var dto = _mapper.Map<List<CompanyDTO>>(items);
+
+            var result = new PagedResult<CompanyDTO>
             {
-                Companies = items,
-                TotalCount = totalCount
+                Items = dto,
+                TotalAmount = totalCount,
+                Page = page,
+                TotalPages = totalCount / amount,
+                PageAmount = page
             };
 
             return Ok(result);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCompany(long id, Company company)
-        {
-            if (id != company.ID)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(company).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await CompanyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Ok(company);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Company>> PostCompany(Company company)
-        {
-            _context.Companies.Add(company);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCompany", new { id = company.ID }, company);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCompany(long id)
-        {
-            var company = await _context.Companies.FindAsync(id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            _context.Companies.Remove(company);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private async Task<bool> CompanyExists(long id)
-        {
-            return await _context.Companies.AnyAsync(e => e.ID == id);
         }
     }
 }

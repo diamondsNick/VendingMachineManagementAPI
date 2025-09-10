@@ -14,9 +14,9 @@ namespace VendingMachineManagementAPI.Controllers.V1
     public abstract class BaseController<TEntity, TDTO, TKey> : ControllerBase
         where TEntity : class
     {
-        private readonly ManagementDbContext _context;
-        private readonly DbSet<TEntity> _dbSet;
-        private readonly IMapper _mapper;
+        protected readonly ManagementDbContext _context;
+        protected readonly DbSet<TEntity> _dbSet;
+        protected readonly IMapper _mapper;
 
         public BaseController(ManagementDbContext context, IMapper mapper)
         {
@@ -26,15 +26,32 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpGet]
-        public virtual async Task<ActionResult<TDTO>> GetEntities()
+        public virtual async Task<ActionResult<List<TDTO>>> GetEntities()
         {
             var res = await _dbSet.ToListAsync();
 
             if (!res.Any()) return NotFound();
 
-            var mapped = _mapper.Map<List<TEntity>>(res);
+            var mapped = _mapper.Map<List<TDTO>>(res);
 
             return Ok(mapped);
+        }
+
+        [HttpGet("{ID}")]
+        public virtual async Task<ActionResult> GetByID([FromRoute] TKey ID)
+        {
+            if (ID == null) return BadRequest("ID cannot be null");
+
+            var res = await _dbSet.FindAsync(ID);
+
+            if (res == null)
+            {
+                return NotFound("Object with this id was not found");
+            }
+
+            var dto = _mapper.Map<TDTO>(res);
+
+            return Ok(dto);
         }
 
         [HttpPost]
@@ -60,7 +77,6 @@ namespace VendingMachineManagementAPI.Controllers.V1
             {
                 return Problem("Internal server error", statusCode: 500);
             }
-
         }
 
         [HttpPut("{ID}")]
@@ -116,6 +132,5 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         protected abstract TKey GetKey(TDTO entity);
-
     }
 }

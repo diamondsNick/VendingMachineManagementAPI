@@ -15,12 +15,9 @@ namespace VendingMachineManagementAPI.Controllers.V1
     [ApiController]
     public class CompaniesController : BaseController<Company, CompanyDTO, long>
     {
-        public CompaniesController(ManagementDbContext context, IMapper mapper) : base(context, mapper){}
+        public CompaniesController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
 
-        protected override long GetKey(CompanyDTO entity)
-        {
-            return entity.ID;
-        }
+        protected override long GetKey(CompanyDTO entity) => entity.ID;
 
         [HttpGet("{amount:int}/{page:int}")]
         public async Task<ActionResult<CompanyDTO>> GetPagedCompanies(int amount, int page, [FromQuery] long parentCompanyId)

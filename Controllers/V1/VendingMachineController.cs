@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTO;
 using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
 
@@ -12,16 +14,14 @@ namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class VendingMachineController : Controller
+    public class VendingMachineController : BaseController<VendingMachine, VendingMachineDTO, long>
     {
-        private readonly ManagementDbContext _context;
-        public VendingMachineController(ManagementDbContext context)
-        {
-            _context = context;
-        }
+        public VendingMachineController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
+
+        protected override long GetKey(VendingMachineDTO entity) => entity.ID;
 
         [HttpGet]
-        public async Task<IActionResult> GetVendingMachines()
+        public override async Task<ActionResult> GetEntities()
         {
             var machines = await _context.VendingMachines
                 .Include(vm => vm.Status)
@@ -75,17 +75,20 @@ namespace VendingMachineManagementAPI.Controllers.V1
 
             machines = machines.Skip((page - 1) * amount).Take(amount).ToList();
 
-            var response = new PagedMachinesResult
+            var response = new PagedResult<VendingMachine>
             {
-                VendingMachines = machines,
-                TotalCount = machinesAmount
+                Items = machines,
+                TotalAmount = machinesAmount,
+                TotalPages = machinesAmount / amount,
+                Page = page,
+                PageAmount = amount
             };
 
             return Ok(response);
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetVendingMachine(long Id)
+        public override async Task<ActionResult> GetByID(long Id)
         {
             var machine = await _context.VendingMachines
                 .Include(vm => vm.Status)
@@ -106,79 +109,8 @@ namespace VendingMachineManagementAPI.Controllers.V1
             return Ok(machine);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> PostVendingMachine(VendingMachineDTO machine)
-        {
-            VendingMachine vendingMachine = new VendingMachine
-            {
-                ID = machine.ID,
-                StatusID = machine.StatusID,
-                OperatingModeID = machine.OperatingModeID,
-                CompanyID = machine.CompanyID,
-                ModelID = machine.ModelID,
-                ModemID = machine.ModemID,
-                TimeZone = machine.TimeZone,
-                Name = machine.Name,
-                Adress = machine.Adress,
-                Coordinates = machine.Coordinates,
-                PlacementType = machine.PlacementType,
-                PlacementDate = machine.PlacementDate,
-                StartHours = machine.StartHours,
-                EndHours = machine.EndHours
-            };
-
-            try
-            {
-                _context.VendingMachines.Add(vendingMachine);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await IsVendingMachineExists(vendingMachine.ID))
-                    return BadRequest("Already Exists!");
-                else throw;
-            }
-            return CreatedAtAction(nameof(PostVendingMachine), vendingMachine);
-        }
-
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> PutVendingMachine(long Id, VendingMachineDTO machine)
-        {
-            if (Id != machine.ID) return BadRequest("Ids do not match!");
-            if (!await IsVendingMachineExists(Id)) return NotFound();
-
-            VendingMachine vendingMachine = new VendingMachine
-            {
-                ID = machine.ID,
-                StatusID = machine.StatusID,
-                OperatingModeID = machine.OperatingModeID,
-                CompanyID = machine.CompanyID,
-                ModelID = machine.ModelID,
-                ModemID = machine.ModemID,
-                TimeZone = machine.TimeZone,
-                Name = machine.Name,
-                Adress = machine.Adress,
-                Coordinates = machine.Coordinates,
-                PlacementType = machine.PlacementType,
-                PlacementDate = machine.PlacementDate,
-                StartHours = machine.StartHours,
-                EndHours = machine.EndHours
-            };
-
-            try
-            {
-                _context.Entry(vendingMachine).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-            return Ok(vendingMachine);
-        }
-
         [HttpDelete("{Id}")]
-        public async Task<ActionResult> DeleteVendingMachine(long Id)
+        public override async Task<ActionResult> DeleteEntity(long Id)
         {
             if (!await IsVendingMachineExists(Id))
                 return NotFound();

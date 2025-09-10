@@ -26,7 +26,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpGet]
-        public virtual async Task<ActionResult<List<TDTO>>> GetEntities()
+        public virtual async Task<ActionResult> GetEntities()
         {
             var res = await _dbSet.ToListAsync();
 

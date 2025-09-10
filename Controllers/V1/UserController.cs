@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTO;
 using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
 
@@ -10,17 +13,14 @@ namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class UserController : Controller
+    public class UserController : BaseController<User, UserDTO, long>
     {
-        private readonly ManagementDbContext _context;
+        public UserController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
 
-        public UserController(ManagementDbContext context)
-        {
-            _context = context;
-        }
+        protected override long GetKey(UserDTO entity) => entity.ID;
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public override async Task<ActionResult> GetEntities()
         {
             var users = await _context.Users
                 .Include(u => u.Company)
@@ -36,7 +36,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetUserInfo(long Id)
+        public override async Task<ActionResult> GetByID([FromRoute] long Id)
         {
             var user = await _context.Users
                 .Include(u => u.Company)
@@ -50,8 +50,9 @@ namespace VendingMachineManagementAPI.Controllers.V1
 
             return Ok(user);
         }
+
         [HttpGet("{amount:int}/{page:int}")]
-        public async Task<ActionResult<PagedUsers>> GetPagedUsers(int amount, int page, [FromQuery] long CompanyId)
+        public async Task<ActionResult<PagedResult<User>>> GetPagedUsers(int amount, int page, [FromQuery] long CompanyId)
         {
             var query = _context.Users.AsQueryable();
 
@@ -75,106 +76,18 @@ namespace VendingMachineManagementAPI.Controllers.V1
                 return NotFound("Page does not exist!");
             }
 
-            var result = new PagedUsers
+            var dto = _mapper.Map<List<UserDTO>>(items);
+
+            var result = new PagedResult<UserDTO>
             {
-                Users = items,
-                TotalCount = totalCount
+                Items = dto,
+                TotalAmount = totalCount,
+                TotalPages = totalCount / amount,
+                PageAmount = amount,
+                Page = page
             };
 
             return Ok(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostUser(UserDTO userDTO)
-        {
-            User user = new User();
-            try
-            {
-                user = new()
-                {
-                    ID = (long)userDTO.ID,
-                    FullName = userDTO.FullName,
-                    Email = userDTO.Email,
-                    Phone = userDTO.Phone,
-                    RegistrationDate = userDTO.RegistrationDate,
-                    RoleID = userDTO.RoleID,
-                    CompanyID = userDTO.CompanyID,
-                    Language = userDTO.Language,
-                    Login = userDTO.Login,
-                    Password = userDTO.Password
-                };
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (await UserExists((long)userDTO.ID))
-                    return BadRequest("User already exists!");
-                else throw;
-            }
-
-            return CreatedAtAction(nameof(GetUserInfo), new { Id = user.ID }, user);
-        }
-
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> PutUser(long Id, UserDTO userDTO)
-        {
-            User user = new User()
-            {
-                ID = (long)userDTO.ID,
-                FullName = userDTO.FullName,
-                Email = userDTO.Email,
-                Phone = userDTO.Phone,
-                RegistrationDate = userDTO.RegistrationDate,
-                RoleID = userDTO.RoleID,
-                CompanyID = userDTO.CompanyID,
-                Language = userDTO.Language,
-                Login = userDTO.Login,
-                Password = userDTO.Password
-            };
-
-            if (Id != user.ID) return BadRequest("Ids do not match!");
-            if (!await UserExists(Id)) return NotFound();
-
-            try
-            {
-                _context.Entry(user).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return Ok(user);
-        }
-
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteUser(long Id)
-        {
-            var user = await _context.Users.FindAsync(Id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            return Ok();
-        }
-
-        private async Task<bool> UserExists(long Id)
-        {
-            return await _context.Users.AnyAsync(u => u.ID == Id);
         }
     }
 }

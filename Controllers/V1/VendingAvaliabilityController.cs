@@ -36,7 +36,9 @@ namespace VendingMachineManagementAPI.Controllers.V1
                 return NotFound();
             }
 
-            return Ok(availabilities);
+            var res = await availabilities.ToListAsync();
+
+            return Ok(res);
         }
 
         [HttpGet("{Id}")]

@@ -1,38 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTO;
+using VendingMachineManagementAPI.DTO.V1;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class SimCardController : Controller
+    public class SimCardController : BaseController<SimCard, SimCardDTO, long>
     {
-        private readonly ManagementDbContext _context;
-        public SimCardController(ManagementDbContext context)
-        {
-            _context = context;
-        }
+        public SimCardController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSimCards()
-        {
-            var simCards = await _context.SimCards.ToListAsync();
-
-            if (simCards == null || !simCards.Any())
-            {
-                return NotFound();
-            }
-
-            return Ok(simCards);
-        }
+        protected override long GetKey(SimCardDTO entity) => entity.ID;
 
         [HttpGet("{amount:int}/{page:int}")]
-        public async Task<ActionResult<PagedSimCards>> GetPagedSims(int amount, int page, [FromQuery] long CompanyId, [FromQuery] bool linked)
+        public async Task<ActionResult<PagedResult<SimCardDTO>>> GetPagedSims(int amount, int page, [FromQuery] long CompanyId, [FromQuery] bool linked)
         {
             var query = _context.SimCards.AsQueryable();
 
@@ -57,81 +46,18 @@ namespace VendingMachineManagementAPI.Controllers.V1
                 return NotFound("Page does not exist!");
             }
 
-            var result = new PagedSimCards
+            var dto = _mapper.Map<List<SimCardDTO>>(items);
+
+            var result = new PagedResult<SimCardDTO>
             {
-                Sims = items,
-                TotalCount = totalCount
+                Items = dto,
+                TotalAmount = totalCount,
+                TotalPages = totalCount / amount,
+                Page = page,
+                PageAmount = amount
             };
 
             return Ok(result);
-        }
-
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetSimCard(long Id)
-        {
-            var simCard = await _context.SimCards.FindAsync(Id);
-
-            if (simCard == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(simCard);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostSimCard(SimCard simCard)
-        {
-            try
-            {
-                _context.SimCards.Add(simCard);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await IsSimCardExists(simCard.ID))
-                    return BadRequest("Already Exists!");
-                else throw;
-            }
-            return CreatedAtAction(nameof(PostSimCard), simCard);
-        }
-
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> PutSimCard(long Id, SimCard simCard)
-        {
-            if (Id != simCard.ID) return BadRequest("Ids does not match!");
-            if (!await IsSimCardExists(Id)) return NotFound();
-            try
-            {
-                _context.Entry(simCard).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-            return Ok(simCard);
-        }
-
-        [HttpDelete("{Id}")]
-        public async Task<ActionResult> DeleteSimCard(long Id)
-        {
-            if (!await IsSimCardExists(Id))
-                return NotFound();
-            try
-            {
-                var simCard = await _context.SimCards.FindAsync(Id);
-                _context.SimCards.Remove(simCard);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) { throw; }
-            return Ok();
-        }
-
-        private async Task<bool> IsSimCardExists(long Id)
-        {
-            bool exists = await _context.SimCards.AnyAsync(m => m.ID == Id);
-            return exists;
         }
     }
 }

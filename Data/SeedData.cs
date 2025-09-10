@@ -589,7 +589,7 @@ namespace VendingMachineManagementAPI.Data
                 {
                     await context.SaveChangesAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }

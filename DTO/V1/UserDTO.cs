@@ -4,7 +4,7 @@ namespace VendingMachineManagementAPI.DTOs.V1
 {
     public class UserDTO
     {
-        public long? ID { get; set; }
+        public long ID { get; set; }
         [MaxLength(100)]
         public string FullName { get; set; }
         [MaxLength(100)]

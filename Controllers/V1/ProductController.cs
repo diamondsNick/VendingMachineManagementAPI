@@ -20,7 +20,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
 
         protected override long GetKey(ProductDTO entity) => entity.ID;
 
-        [HttpGet]
+        [HttpGet("{amount:int}/{page:int}")]
         public async Task<ActionResult<PagedResult<ProductDTO>>> GetProducts([FromQuery] int amount = 0, [FromQuery] int page = 0)
         {
 

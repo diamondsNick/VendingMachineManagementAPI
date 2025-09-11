@@ -68,7 +68,9 @@ namespace VendingMachineManagementAPI.Controllers.V1
 
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(PostEntity), res);
+                var created = _mapper.Map<TDTO>(res);
+
+                return CreatedAtAction(nameof(PostEntity), created);
             }
             catch (DbUpdateException)
             {

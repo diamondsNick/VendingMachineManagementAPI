@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTO.V1;
 
 namespace VendingMachineManagementAPI.Controllers.V1
 {
@@ -14,21 +15,25 @@ namespace VendingMachineManagementAPI.Controllers.V1
         {
             _context = context;
         }
-        [HttpGet("{Login}/{Password}")]
-        public async Task<IActionResult> AuthentificateUser(string Login, string Password)
+
+        [HttpPost]
+        public async Task<IActionResult> AuthentificateUser([FromBody] UserAuthDTO loginData)
         {
             var user = await _context.Users
                 .Include(u => u.Company)
                 .Include(u => u.Role)
-                .FirstOrDefaultAsync(x => x.Login == Login && x.Password == Password);
+                .FirstOrDefaultAsync(x => x.Login == loginData.Login && x.Password == loginData.Password);
+
             if (user == null)
             {
                 return NotFound();
             }
+
             if (user != null)
             {
                 return Ok(user);
             }
+
             return BadRequest();
         }
     }

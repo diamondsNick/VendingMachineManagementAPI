@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -14,7 +15,9 @@ namespace VendingMachineManagementAPI.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Balance { get; set; }
         public long? CompanyID { get; set; }
+        [JsonIgnore]
         public Modem Modem { get; set; }
+        [JsonIgnore]
         public Company Company { get; set; }
     }
 }

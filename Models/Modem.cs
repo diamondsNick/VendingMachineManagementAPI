@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -14,9 +15,12 @@ namespace VendingMachineManagementAPI.Models
         public long? SerialNum { get; set; }
         public string Password { get; set; }
         [AllowNull]
+        [JsonIgnore]
         public SimCard SimCard { get; set; }
+        [JsonIgnore]
         public VendingMachine VendingMachine { get; set; }
         [AllowNull]
+        [JsonIgnore]
         public Company Company { get; set; }
     }
 }

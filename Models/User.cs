@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 namespace VendingMachineManagementAPI.Models
 {
     public class User
@@ -28,11 +29,10 @@ namespace VendingMachineManagementAPI.Models
         [MinLength(12)]
         [MaxLength(24)]
         public string Password { get; set; }
-
         public Role Role { get; set; }
 
         public Company Company { get; set; }
-
+        [JsonIgnore]
         public IList<Maintenance> Maintenances { get; set; }
     }
 }

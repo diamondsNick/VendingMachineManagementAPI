@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -38,7 +39,9 @@ namespace VendingMachineManagementAPI.Models
         public string EndHours { get; set; }
 
         public IList<MachinePaymentMethod> MachinePaymentMethods { get; set; }
+
         public Status Status { get; set; }
+
         public Modem Modem { get; set; }
 
         public IList<Sale> Sales { get; set; }
@@ -50,7 +53,9 @@ namespace VendingMachineManagementAPI.Models
         public IList<VendingMachineMoney> VendingMachineMoney { get; set; }
 
         public IList<VendingAvailability> VendingAvaliabilities { get; set; }
+        [JsonIgnore]
         public VendingMachineMatrix VendingMachineMatrix { get; set; }
+        [JsonIgnore]
         public Company Company { get; set; }
     }
 }

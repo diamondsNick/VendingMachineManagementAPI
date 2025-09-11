@@ -57,7 +57,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
                 .Include(vm => vm.VendingMachineMoney)
                 .Include(vm => vm.VendingAvaliabilities)
                 .Include(vm => vm.VendingMachineMatrix)
-                .ThenInclude(mx => mx.Manufacturer)
+                    .ThenInclude(mx => mx.Manufacturer)
                 .Where(vm => vm.CompanyID == CompanyId)
                 .ToListAsync();
 

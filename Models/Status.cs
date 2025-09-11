@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace VendingMachineManagementAPI.Models
 {
@@ -9,7 +10,7 @@ namespace VendingMachineManagementAPI.Models
         [MaxLength(100)]
         [Required]
         public string Name { get; set; }
-
+        [JsonIgnore]
         public IList<VendingMachine> VendingMachines { get; set; }
     }
 }

@@ -92,6 +92,7 @@ namespace VendingMachineManagementAPI.Data
                 }
             }
         }
+
         private static async Task SeedStatusesAsync(ManagementDbContext context)
         {
 

@@ -1,81 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class MachinePaymentMethodController : Controller
+    public class MachinePaymentMethodController : BaseController<MachinePaymentMethod, MachinePaymentMethodDTO, long>
     {
-        private readonly ManagementDbContext _context;
-        public MachinePaymentMethodController(ManagementDbContext context)
+        public MachinePaymentMethodController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
+
+        protected override long GetKey(MachinePaymentMethodDTO entity) =>  entity.VendingMachineID;
+
+        [NonAction]
+        public override Task<ActionResult<MachinePaymentMethodDTO>> PutEntity([FromRoute] long ID, [FromBody] MachinePaymentMethodDTO entity)
         {
-            _context = context;
+            return Task.FromResult<ActionResult<MachinePaymentMethodDTO>>(BadRequest());
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetMachinePaymentMethod()
+        [NonAction]
+        public override Task<ActionResult> DeleteEntity([FromRoute] long ID)
         {
-
-            var machinePaymentMethods = await _context.MachinePaymentMethods.ToListAsync();
-
-            if (machinePaymentMethods == null || !machinePaymentMethods.Any())
-            {
-                return BadRequest(new { message = "No data was found" });
-            }
-
-            return Ok(machinePaymentMethods);
-        }
-
-        [HttpGet("{VendingMachineID}")]
-        public async Task<IActionResult> GetPaymentMethodFromMachine(long VendingMachineID)
-        {
-            var machinePaymentMethodes = await _context.MachinePaymentMethods.FindAsync(VendingMachineID);
-
-            if (machinePaymentMethodes == null)
-            {
-                return BadRequest(new { message = "No data was found" });
-            }
-
-            return Ok(machinePaymentMethodes);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<MachinePaymentMethod>> PostMachinePaymentMethod(MachinePaymentMethod method)
-        {
-            try
-            {
-                _context.MachinePaymentMethods.Add(method);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await IsMethodExists(method.VendingMachineID, method.PaymentMethodID))
-                    return BadRequest("Already Exists!");
-                else throw;
-            }
-            return CreatedAtAction(nameof(PostMachinePaymentMethod), method);
-        }
-
-        [HttpPut("{VendingMachineID}/{PaymentMethodID}")]
-        public async Task<ActionResult<MachinePaymentMethod>> PutMachinePaymentMethod(long VendingMachineID, long PaymentMethodID, MachinePaymentMethod method)
-        {
-            if (!await IsMethodExists(method.VendingMachineID, method.PaymentMethodID)) return NotFound();
-            if (method.VendingMachineID != VendingMachineID && method.PaymentMethodID != PaymentMethodID) return BadRequest("Ids does not match!");
-            _context.Entry(method).State = EntityState.Modified;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return StatusCode(500, "Error occured while saving changes!");
-            }
-            return Ok(method);
+            return Task.FromResult<ActionResult>(BadRequest());
         }
 
         [HttpDelete("{VendingMachineID}/{PaymentMethodID}")]

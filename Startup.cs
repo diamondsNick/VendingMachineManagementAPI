@@ -30,7 +30,7 @@ namespace VendingMachineManagementAPI
             });
             services.AddDbContext<ManagementDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Laptop"));
+                options.UseSqlServer(Configuration.GetConnectionString("Colledge"));
                 options.EnableDetailedErrors();
             });
 

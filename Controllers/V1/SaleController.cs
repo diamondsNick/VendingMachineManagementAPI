@@ -1,35 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTO.V1;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class SaleController : Controller
+    public class SaleController : BaseController<Sale, SaleDTO, long>
     {
-        private readonly ManagementDbContext _context;
-        public SaleController(ManagementDbContext context)
-        {
-            _context = context;
-        }
+        public SaleController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSales()
-        {
-            var sales = await _context.Sales.ToListAsync();
-
-            if (sales == null || !sales.Any())
-            {
-                return NotFound();
-            }
-
-            return Ok(sales);
-        }
+        protected override long GetKey(SaleDTO entity) => entity.ID;
 
         [HttpGet("company/{CompanyId}")]
         public async Task<IActionResult> GetCompanySales(long CompanyId)
@@ -45,73 +32,6 @@ namespace VendingMachineManagementAPI.Controllers.V1
             }
 
             return Ok(sale);
-        }
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetSale(long Id)
-        {
-            var sale = await _context.Sales.FindAsync(Id);
-
-            if (sale == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(sale);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostSale(Sale sale)
-        {
-            try
-            {
-                _context.Sales.Add(sale);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await IsSaleExists(sale.ID))
-                    return BadRequest("Already Exists!");
-                else throw;
-            }
-            return CreatedAtAction(nameof(PostSale), sale);
-        }
-
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> PutSale(long Id, Sale sale)
-        {
-            if (Id != sale.ID) return BadRequest("Ids does not match!");
-            if (!await IsSaleExists(Id)) return NotFound();
-            try
-            {
-                _context.Entry(sale).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-            return Ok(sale);
-        }
-
-        [HttpDelete("{Id}")]
-        public async Task<ActionResult> DeleteSale(long Id)
-        {
-            if (!await IsSaleExists(Id))
-                return NotFound();
-            try
-            {
-                var sale = await _context.Sales.FindAsync(Id);
-                _context.Sales.Remove(sale);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) { throw; }
-            return Ok();
-        }
-
-        private async Task<bool> IsSaleExists(long Id)
-        {
-            bool exists = await _context.Sales.AnyAsync(m => m.ID == Id);
-            return exists;
         }
     }
 }

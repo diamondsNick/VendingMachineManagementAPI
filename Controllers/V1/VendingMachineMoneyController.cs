@@ -1,24 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTO.V1;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class VendingMachineMoneyController : Controller
+    public class VendingMachineMoneyController : BaseController<VendingMachineMoney, VendingMachineMoneyDTO, long>
     {
-        private readonly ManagementDbContext _context;
-        public VendingMachineMoneyController(ManagementDbContext context)
-        {
-            _context = context;
-        }
+        public VendingMachineMoneyController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
+
+        protected override long GetKey(VendingMachineMoneyDTO entity) => entity.ID;
 
         [HttpGet]
-        public async Task<IActionResult> GetVendingMachineMoney()
+        public override async Task<ActionResult> GetEntities()
         {
             var vendingMoney = await _context.VendingMachineMoney
                 .Include(vm => vm.VendingMachine)
@@ -34,7 +34,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetVendingMachineMoney(long Id)
+        public override async Task<ActionResult> GetByID(long Id)
         {
             var vendingMoney = await _context.VendingMachineMoney
                 .Include(vm => vm.VendingMachine)
@@ -47,61 +47,6 @@ namespace VendingMachineManagementAPI.Controllers.V1
             }
 
             return Ok(vendingMoney);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostVendingMachineMoney(VendingMachineMoney vendingMoney)
-        {
-            try
-            {
-                _context.VendingMachineMoney.Add(vendingMoney);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await IsVendingMachineMoneyExists(vendingMoney.ID))
-                    return BadRequest("Already Exists!");
-                else throw;
-            }
-            return CreatedAtAction(nameof(PostVendingMachineMoney), vendingMoney);
-        }
-
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> PutVendingMachineMoney(long Id, VendingMachineMoney vendingMoney)
-        {
-            if (Id != vendingMoney.ID) return BadRequest("Ids do not match!");
-            if (!await IsVendingMachineMoneyExists(Id)) return NotFound();
-            try
-            {
-                _context.Entry(vendingMoney).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-            return Ok(vendingMoney);
-        }
-
-        [HttpDelete("{Id}")]
-        public async Task<ActionResult> DeleteVendingMachineMoney(long Id)
-        {
-            if (!await IsVendingMachineMoneyExists(Id))
-                return NotFound();
-            try
-            {
-                var vendingMoney = await _context.VendingMachineMoney.FindAsync(Id);
-                _context.VendingMachineMoney.Remove(vendingMoney);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) { throw; }
-            return Ok();
-        }
-
-        private async Task<bool> IsVendingMachineMoneyExists(long Id)
-        {
-            bool exists = await _context.VendingMachineMoney.AnyAsync(m => m.ID == Id);
-            return exists;
         }
     }
 }

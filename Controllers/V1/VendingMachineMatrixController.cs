@@ -1,24 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTO.V1;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class VendingMachineMatrixController : Controller
+    public class VendingMachineMatrixController : BaseController<VendingMachineMatrix, VendingMachineMatrixDTO, long>
     {
-        private readonly ManagementDbContext _context;
-        public VendingMachineMatrixController(ManagementDbContext context)
-        {
-            _context = context;
-        }
+        public VendingMachineMatrixController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
+
+        protected override long GetKey(VendingMachineMatrixDTO entity) => entity.ID;
 
         [HttpGet]
-        public async Task<IActionResult> GetVendingMachineMatrices()
+        public override async Task<ActionResult> GetEntities()
         {
             var matrices = await _context.VendingMachineMatrices
                 .Include(vm => vm.Manufacturer)
@@ -34,7 +34,7 @@ namespace VendingMachineManagementAPI.Controllers.V1
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetVendingMachineMatrix(long Id)
+        public async override Task<ActionResult> GetByID(long Id)
         {
             var matrix = await _context.VendingMachineMatrices
                 .Include(vm => vm.Manufacturer)
@@ -47,61 +47,6 @@ namespace VendingMachineManagementAPI.Controllers.V1
             }
 
             return Ok(matrix);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> PostVendingMachineMatrix(VendingMachineMatrix matrix)
-        {
-            try
-            {
-                _context.VendingMachineMatrices.Add(matrix);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await IsVendingMachineMatrixExists(matrix.ID))
-                    return BadRequest("Already Exists!");
-                else throw;
-            }
-            return CreatedAtAction(nameof(PostVendingMachineMatrix), matrix);
-        }
-
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> PutVendingMachineMatrix(long Id, VendingMachineMatrix matrix)
-        {
-            if (Id != matrix.ID) return BadRequest("Ids do not match!");
-            if (!await IsVendingMachineMatrixExists(Id)) return NotFound();
-            try
-            {
-                _context.Entry(matrix).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-            return Ok(matrix);
-        }
-
-        [HttpDelete("{Id}")]
-        public async Task<ActionResult> DeleteVendingMachineMatrix(long Id)
-        {
-            if (!await IsVendingMachineMatrixExists(Id))
-                return NotFound();
-            try
-            {
-                var matrix = await _context.VendingMachineMatrices.FindAsync(Id);
-                _context.VendingMachineMatrices.Remove(matrix);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) { throw; }
-            return Ok();
-        }
-
-        private async Task<bool> IsVendingMachineMatrixExists(long Id)
-        {
-            bool exists = await _context.VendingMachineMatrices.AnyAsync(m => m.ID == Id);
-            return exists;
         }
     }
 }

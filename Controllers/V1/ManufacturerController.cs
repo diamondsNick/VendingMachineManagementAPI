@@ -1,23 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Threading.Tasks;
 using VendingMachineManagementAPI.Data;
+using VendingMachineManagementAPI.DTOs.V1;
 using VendingMachineManagementAPI.Models;
 
 namespace VendingMachineManagementAPI.Controllers.V1
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class ManufacturerController : Controller
+    public class ManufacturerController : BaseController<Manufacturer, ManufacturerDTO, long>
     {
-        private readonly ManagementDbContext _context;
-        public ManufacturerController(ManagementDbContext context)
-        {
-            _context = context;
-        }
+        public ManufacturerController(ManagementDbContext context, IMapper mapper) : base(context, mapper) { }
+
+        protected override long GetKey(ManufacturerDTO entity) => entity.ID;
+
         [HttpGet]
-        public async Task<ActionResult<Manufacturer>> GetManufacturers()
+        public async override Task<ActionResult> GetEntities()
         {
             if (!await _context.Manufacturers.AnyAsync()) return NotFound();
             try
@@ -29,63 +30,21 @@ namespace VendingMachineManagementAPI.Controllers.V1
             }
             catch (DBConcurrencyException) { throw; }
         }
+
         [HttpGet("{Id}")]
-        public async Task<ActionResult<Manufacturer>> GetManufacturer(long Id)
+        public override async Task<ActionResult> GetByID([FromRoute] long ID)
         {
-            if (!await IsManufacturerExists(Id)) return NotFound();
+            if (!await IsManufacturerExists(ID)) return NotFound();
             try
             {
                 var manufacturers = await _context.Manufacturers
                     .Include(e => e.VendingMachineMatrices)
-                    .FirstAsync(e => e.ID == Id);
+                    .FirstAsync(e => e.ID == ID);
                 return Ok(manufacturers);
             }
             catch (DBConcurrencyException) { throw; }
         }
-        [HttpPost]
-        public async Task<IActionResult> PostManufacturer(Manufacturer manufacturer)
-        {
-            bool check = await _context.Manufacturers.AnyAsync(e => e.Name == manufacturer.Name);
-            if (check) return BadRequest("Object already exists!");
-            try
-            {
-                _context.Manufacturers.Add(manufacturer);
-                _context.SaveChanges();
-            }
-            catch (DBConcurrencyException)
-            {
-                throw;
-            }
-            return CreatedAtAction(nameof(GetManufacturer), new { id = manufacturer.ID }, manufacturer);
-
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> PutManufacturer(Manufacturer manufacturer)
-        {
-            if (!await IsManufacturerExists(manufacturer.ID)) return NotFound();
-            if (await _context.Manufacturers.AnyAsync(e => e.Name == manufacturer.Name)) return BadRequest("Object with this name already exists!");
-            try
-            {
-                _context.Entry(manufacturer).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DBConcurrencyException) { throw; }
-            return CreatedAtAction(nameof(PutManufacturer), new { id = manufacturer.ID }, manufacturer);
-        }
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteManufacturer(long Id)
-        {
-            if (!await IsManufacturerExists(Id)) return NotFound();
-            try
-            {
-                var manufacturer = await _context.Manufacturers.FindAsync(Id);
-                _context.Manufacturers.Remove(manufacturer);
-                await _context.SaveChangesAsync();
-            }
-            catch (DBConcurrencyException) { throw; }
-            return Ok();
-        }
+        
         private async Task<bool> IsManufacturerExists(long Id)
         {
             var exists = await _context.Manufacturers.AnyAsync(e => e.ID == Id);
